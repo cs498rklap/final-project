@@ -1,6 +1,6 @@
 var postControllers = angular.module('post.controllers', []);
 
-postControllers.controller('PostIndividualController', ['$scope', '$routeParams', '$location', 'PostIndividual', function($scope, $routeParams, $location, PostIndividual) {
+postControllers.controller('PostIndividualController', ['$scope', '$routeParams', '$location', 'PostIndividual', 'AuthService', function($scope, $routeParams, $location, PostIndividual, AuthService) {
     $scope.newComment = '';
     $scope.edit = [];
     $scope.commentError = [];
@@ -12,6 +12,11 @@ postControllers.controller('PostIndividualController', ['$scope', '$routeParams'
             $scope.post = response.data.data;
             $scope.contents = $scope.post.content.split('\n');
             $scope.setEditArray();
+            return AuthService.getUserInformation();
+        }, function(error) {
+            $scope.error = error.data.message;
+        }).then(function(response) {
+            $scope.user = response.data.data;
         }, function(error) {
             $scope.error = error.data.message;
         });
@@ -22,7 +27,7 @@ postControllers.controller('PostIndividualController', ['$scope', '$routeParams'
             $scope.error = "Please enter comment text.";
         } else {
             var comment = {
-                username: 'testUser',
+                username: $scope.user.username,
                 text: $scope.newComment,
                 timestamp: Date.now()
             };

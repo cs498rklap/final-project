@@ -22,6 +22,9 @@ postsServices.factory('Posts', function($http) {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				}
 			});
+		},
+		getWithQuery: function(params) {
+			return $http.get('http://localhost:3000/api/posts', {params: params === undefined ? {} : params});
 		}
 	}
 });

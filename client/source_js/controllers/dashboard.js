@@ -28,6 +28,14 @@ dashboardControllers.controller('DashboardController', ['$scope', 'Jobs', 'Posts
             $scope.error = error.message;
         }).then(function(user) {
             $scope.user = user.data.data;
+            var params = {
+                'where': {'author': $scope.user.username}
+            };
+            return Posts.getWithQuery(params);
+        }, function(error) {
+            $scope.error = error.message;
+        }).then(function(results) {
+            $scope.myPosts = results.data.data;
         }, function(error) {
             $scope.error = error.message;
         });
