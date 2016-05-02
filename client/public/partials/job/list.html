@@ -1,0 +1,51 @@
+
+<div class="row text-center">
+    <h1>JOB POSTINGS</h1>
+</div>
+
+{{page}}
+
+<div class="row clearfix">
+    <span class="float-left">
+        <ul class="pagination">
+            <li ng-class="page<=1 ? 'arrow unavailable' : 'arrow'" ng-click="firstPage();">&laquo</li>
+            <li ng-class="page<=1 ? 'arrow unavailable' : 'arrow'" ng-click="prevPage();"><</li>
+
+            <li ng-repeat="num in getPages()" ng-class="page==num ? 'current' : ''" ng-click="setPage(num);">{{num}}</li>
+
+            <li ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="nextPage();">></li>
+            <li ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="lastPage();">&raquo</li>
+        </ul>
+    </span>
+    <span class="new-post float-right">
+        <a class="success button" href="#/addjob">New Post</a>
+    </span>
+</div>
+
+<div ng-repeat="job in jobs" class="row">
+    <a ng-href="#/jobs/{{job._id}}" class="small-12 columns clearfix">
+        <span class="float-left">
+            {{job.title}} - {{job.city}}, {{job.state}}
+        </span>
+        <span class="float-right">
+            Author - {{job.dateCreated}}
+        </span>
+    </a>
+</div>
+
+<div class="row clearfix">
+    <span class="float-left">
+        <ul class="pagination">
+            <li ng-class="page<=1 ? 'arrow unavailable' : 'arrow'" ng-click="firstPage();">&laquo</li>
+            <li ng-class="page<=1 ? 'arrow unavailable' : 'arrow'" ng-click="prevPage();"><</li>
+
+            <li ng-repeat="num in getPages()" ng-class="page==num ? 'current' : ''" ng-click="setPage(num);">{{num}}</li>
+
+            <li ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="nextPage();">></li>
+            <li ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="lastPage();">&raquo</li>
+        </ul>
+    </span>
+    <span class="new-post float-right">
+        <a class="success button" href="#/addjob">New Post</a>
+    </span>
+</div>

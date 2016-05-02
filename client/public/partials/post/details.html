@@ -1,0 +1,53 @@
+<div ng-init="initialize()">
+    <h1 class="text-center">{{post.title}}</h1>
+    <div class="row">
+        <div class="columns small-12 medium-4">
+            <p>By: {{post.author}}</p>
+        </div>
+        <div class="columns small-12 medium-4">
+            <span ng-repeat="tag in post.tags" class="info label">{{tag}}</span><br/>
+        </div>
+        <div class="columns small-12 medium-4">
+            <p>{{post.timestamp | date: 'MMMM d, yyyy'}}</p>
+            <!-- TODO: only display if the user name is the same as the logged user name -->
+            <a href="#/edit-post/{{post._id}}"><button class="button success">Edit</button></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="columns small-12">
+            <p ng-repeat="content in contents">{{content}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="columns small-12">
+            <h4>Comments</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="columns small-12" ng-repeat="comment in post.comments">
+            <p ng-show="!edit[$index]">{{comment.text}} {{comment.timestamp | date: 'MMMM d, yyyy'}}</p>
+            <p ng-show="!edit[$index]">{{comment.username}}</p>
+            <form ng-show="edit[$index]" ng-submit="updateComment(comment, $index)">
+                <textarea ng-model="comment.text"></textarea>
+                <input type="submit" class="button" value="Submit"></input>
+                <button type="button" class="button" ng-click="getPost(post._id)">Cancel</button>
+                <div class="callout alert" ng-show="commentError[$index] || commentError[$index].length > 0">{{commentError[$index]}}</div>
+            </form>
+            <button class="button success" ng-show="!edit[$index]" ng-click="edit[$index] = true">Edit</button>
+            <button class="button alert" ng-click="deleteComment(comment)">Delete</button>
+        </div>
+    </div>
+    <form ng-submit="addComment()">
+        <div class="row">
+            <div class="columns small-12">
+                <label>Leave a comment
+                    <textarea placeholder="Comment text" ng-model="newComment" rows="3"></textarea>
+                </label>
+                <input type="submit" class="button" value="Submit"></button>
+            </div>
+            <div class="columns small-12">
+                <div class="callout alert" ng-show="error || error.length > 0">{{error}}</div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,23 @@
+// Insert your variables
+/* Fonts: ----------------------------------------------------------------------------------------- */
+// Header (h1 - h6):
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+$font-h: 'Montserrat', sans-serif;
+$font-h1-size: 48px;
+$font-h2-size: 36px;
+$font-h3-size: 28px;
+$font-h4-size: 24px;
+$font-h5-size: 20px;
+$font-h6-size: 16px;
+// Body:
+@import url(https://fonts.googleapis.com/css?family=Cabin);
+$font-primary: 'Cabin', sans-serif;
+$font-primary-size: 12px;
+
+/* Colors: ---------------------------------------------------------------------------------------- */
+$bright-green: #42FF54;
+$ugly-green: #00DE4C;
+$dark-green: #26A180;
+$lavender: #B871FF;
+$dark-purple: #6D33CC;
+$red: #990000;

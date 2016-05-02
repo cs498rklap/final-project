@@ -1,0 +1,29 @@
+<div ng-init="initialize()">
+    <form>
+        <div class="row">
+            <div class="columns small-12">
+                <!-- TODO: Remove inline styling once merge -->
+                <label>Title <span class="error">*</span>
+                    <input type="text" placeholder="Title" ng-model="post.title"></input>
+                </label>
+            </div>
+            <div class="columns small-12">
+                <label>Content <span class="error">*</span>
+                    <textarea type="text" rows="3" ng-model="post.content"></textarea>
+                </label>
+            </div>
+            <div class="columns small-12">
+                <label>Add tag
+                    <input type="text" placeholder="Add tag" ng-keyup="$event.keyCode == 13 && addTag()" ng-model="addedTag"></input>
+                </label>
+                <p><span class="info label" ng-repeat="tag in post.tags">{{tag}} <a ng-click="removeTag($index)" style="color: white;"><i class="fa fa-times"></i></a></span></p>
+            </div>
+            <div class="columns small-12">
+                <button type="button" class="button" ng-click="updatePost()">Submit</button>
+            </div>
+        </div>
+    </form>
+    <div class="callout alert" ng-if="error && error.length > 0">
+        <p>{{error}}</p>
+    </div>
+</div>

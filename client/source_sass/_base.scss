@@ -1,0 +1,107 @@
+// Add any custom Sass & CSS here
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css');
+
+.error {
+    color: $red;
+}
+
+// Add any custom Sass & CSS here
+.top-bar {
+    font-weight: bold;
+    background:  $bright-green;
+
+}
+
+.menu-text, .menu-item, .drop-menu {
+    background: $bright-green;
+}
+
+.vert-menu1, .vert-menu2, .vert-menu3 {
+    background: white;
+}
+
+.job-content {
+    background: $bright-green;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.job-content h1{
+    background: $dark-purple;
+    color: white;
+    padding: 0px 20px;
+}
+
+.job-content p {
+    padding: 0px 20px;
+}
+
+.job-info {
+    padding: 0px 20px;
+    font-weight: bold;
+}
+
+#share, #apply {
+    background: $dark-purple;
+}
+/* Shared: ----------------------------------------------------------------------------------------- */
+body {
+    font-family: $font-primary;
+    font-size: $font-primary-size;
+}
+
+.h {
+    font-family: $font-h;
+    color: $dark-green;
+}
+h1 {
+    @extend .h;
+    font-size: $font-h1-size;
+}
+h2 {
+    @extend .h;
+    font-size: $font-h2-size;
+}
+h3 {
+    @extend .h;
+    font-size: $font-h3-size;
+}
+h4 {
+    @extend .h;
+    font-size: $font-h4-size;
+}
+h5 {
+    @extend .h;
+    font-size: $font-h5-size;
+}
+h6 {
+    @extend .h;
+    font-size: $font-h6-size;
+}
+
+/* Ai: --------------------------------------------------------------------------------------------- */
+
+/* Emily: ------------------------------------------------------------------------------------------ */
+
+/* Matt: ------------------------------------------------------------------------------------------- */
+
+/* William: ---------------------------------------------------------------------------------------- */
+.page-selected {
+    color: $dark-purple;
+}
+
+.posts-grid-item {
+    padding-bottom: 20px;
+}
+
+.posts-list {
+    list-style-type: none;
+}
+
+.radio-button {
+    padding-right: 10px;
+}
+
+.red {
+    color: $red;
+}
