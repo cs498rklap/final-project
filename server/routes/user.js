@@ -65,7 +65,16 @@ router.get('/status', function(req, res) {
 });
 
 router.get('/info', function(req, res) {
-    console.log(req.user);
+    if (req.user) {
+        res.status(200).json({
+            message: 'Retrieved user information',
+            data: req.user
+        });
+    } else {
+        res.status(404).json({
+            message: 'Unable to retrieve user',
+        });
+    }
 });
 
 // All development above this line

@@ -1,7 +1,10 @@
-<div ng-init="initialize()">
+<div ng-controller="LogoutController">
+    <a ng-click="logout()" class="button success">Logout</a>
+</div>
+<div>
     <div class="row">
         <div class="columns small-12">
-            <h1>Hello {{user}}!</h1>
+            <h1>Hello {{user.name}}!</h1>
         </div>
     </div>
     <div class="row">

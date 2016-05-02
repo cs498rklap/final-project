@@ -1,7 +1,7 @@
 var dashboardControllers = angular.module('dashboard.controllers', []);
 
-dashboardControllers.controller('DashboardController', ['$scope', 'Jobs', 'Posts', function($scope, Jobs, Posts){
-    $scope.user = 'testuser'; // test for now
+dashboardControllers.controller('DashboardController', ['$scope', 'Jobs', 'Posts', 'AuthService', function($scope, Jobs, Posts, AuthService){
+    //$scope.user = 'testuser'; // test for now
     $scope.postsOrderBy = 'timestamp';
     $scope.jobsOrderBy = 'dateCreated';
     $scope.sortDirection = 1;
@@ -23,8 +23,15 @@ dashboardControllers.controller('DashboardController', ['$scope', 'Jobs', 'Posts
             $scope.error = error.message;
         }).then(function(results) {
             $scope.mostRecentJobs = results.data.data;
+            return AuthService.getUserInformation();
+        }, function(error) {
+            $scope.error = error.message;
+        }).then(function(user) {
+            $scope.user = user.data.data;
         }, function(error) {
             $scope.error = error.message;
         });
     };
+
+    $scope.initialize();
 }]);

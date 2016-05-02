@@ -118,6 +118,9 @@ userServices.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $t
 
             // return promise object
             return deferred.promise;
+        },
+        getUserInformation: function() {
+            return $http.get(baseUrl + '/user/info');
         }
     });
 }]);

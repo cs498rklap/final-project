@@ -3,7 +3,6 @@ var userControllers = angular.module('user.controllers', []);
 userControllers.controller('LoginController',
 ['$scope', '$location', 'AuthService',
 function ($scope, $location, AuthService) {
-
     $scope.login = function () {
 
         // initial values
@@ -14,9 +13,9 @@ function ($scope, $location, AuthService) {
         AuthService.login($scope.loginForm.username, $scope.loginForm.password)
         // handle success
         .then(function () {
-            $location.path('/');
             $scope.disabled = false;
             $scope.loginForm = {};
+            $location.path('/dashboard');
         })
         // handle error
         .catch(function () {
@@ -25,9 +24,7 @@ function ($scope, $location, AuthService) {
             $scope.disabled = false;
             $scope.loginForm = {};
         });
-
     };
-
 }]);
 
 userControllers.controller('LogoutController',

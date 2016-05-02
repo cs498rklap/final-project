@@ -26,10 +26,11 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
     when('/', {
         templateUrl: 'partials/home.html',
-        access: {restricted: true}
+        access: {restricted: false}
     }).
     when('/dashboard', {
-        templateUrl: 'partials/dashboard.html',
+        templateUrl: 'partials/user/dashboard.html',
+        controller: 'DashboardController',
         access: {restricted: true}
     }).
     when('/login', {
