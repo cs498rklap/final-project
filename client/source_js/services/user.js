@@ -8,14 +8,14 @@ userServices.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $t
 
     // return available functions for use in the controllers
     return ({
-        isLoggedIn: function isLoggedIn() {
+        isLoggedIn: function() {
             if(user) {
                 return true;
             } else {
                 return false;
             }
         },
-        getUserStatus: function getUserStatus() {
+        getUserStatus: function() {
             return $http.get(baseUrl + '/user/status')
             // handle success
             .success(function (data) {
@@ -30,17 +30,26 @@ userServices.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $t
                 user = false;
             });
         },
-        login: function login(username, password) {
+        login: function(username, password) {
 
             // create a new instance of deferred
             var deferred = $q.defer();
-
+            var params = {
+                username: username,
+                password: password
+            };
             // send a post request to the server
             $http.post(baseUrl + '/user/login',
-            {username: username, password: password})
+            $.param(params), {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
             // handle success
             .success(function (data, status) {
-                if(status === 200 && data.status){
+                console.log(data);
+                console.log(status);
+                if(status === 200 && data.message){
                     user = true;
                     deferred.resolve();
                 } else {
@@ -57,7 +66,7 @@ userServices.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $t
             // return promise object
             return deferred.promise;
         },
-        logout: function logout() {
+        logout: function() {
 
             // create a new instance of deferred
             var deferred = $q.defer();
@@ -78,14 +87,22 @@ userServices.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $t
             // return promise object
             return deferred.promise;
         },
-        register: function register(username, password) {
+        register: function(username, password, email, name) {
 
             // create a new instance of deferred
             var deferred = $q.defer();
-
+            var params = {
+                username: username,
+                password: password,
+                email: email,
+                name: name
+            };
             // send a post request to the server
-            $http.post(baseUrl + '/user/register',
-            {username: username, password: password})
+            $http.post(baseUrl + '/user/register', $.param(params), {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
             // handle success
             .success(function (data, status) {
                 if(status === 200 && data.status){

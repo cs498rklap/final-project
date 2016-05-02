@@ -3,7 +3,6 @@ var router = express.Router();
 
 var Post = require('../models/post');
 
-// Can just do router.post('/') or get('/')
 var postRoute = router.route('/:id');
 
 postRoute.get(function(req, res) {

@@ -2,7 +2,6 @@ var express = require('express');
 var Posts = require('./../models/post');
 var router = express.Router();
 
-// Can just do router.post('/') or get('/')
 var postsRoute = router.route('/');
 
 // Get all posts

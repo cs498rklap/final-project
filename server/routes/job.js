@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var Job = require('../models/job');
 
-// Can just do router.post('/') or get('/')
 var jobRoute = router.route('/:id');
 
 jobRoute.get(function(req, res) {

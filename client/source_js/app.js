@@ -16,6 +16,9 @@ var app = angular.module('lap', [
     'post.services',
     'post.controllers',
 
+    'dashboard.services',
+    'dashboard.controllers',
+
     '720kb.datepicker'
 ]);
 
@@ -25,18 +28,22 @@ app.config(['$routeProvider', function($routeProvider) {
         templateUrl: 'partials/home.html',
         access: {restricted: true}
     }).
+    when('/dashboard', {
+        templateUrl: 'partials/dashboard.html',
+        access: {restricted: true}
+    }).
     when('/login', {
         templateUrl: 'partials/user/login.html',
-        controller: 'loginController',
+        controller: 'LoginController',
         access: {restricted: false}
     }).
     when('/logout', {
-        controller: 'logoutController',
+        controller: 'LogoutController',
         access: {restricted: true}
     }).
     when('/register', {
         templateUrl: 'partials/user/register.html',
-        controller: 'registerController',
+        controller: 'RegisterController',
         access: {restricted: false}
     }).
     when('/posts/:id', {

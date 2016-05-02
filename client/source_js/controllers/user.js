@@ -1,6 +1,6 @@
 var userControllers = angular.module('user.controllers', []);
 
-userControllers.controller('loginController',
+userControllers.controller('LoginController',
 ['$scope', '$location', 'AuthService',
 function ($scope, $location, AuthService) {
 
@@ -30,7 +30,7 @@ function ($scope, $location, AuthService) {
 
 }]);
 
-userControllers.controller('logoutController',
+userControllers.controller('LogoutController',
 ['$scope', '$location', 'AuthService',
 function ($scope, $location, AuthService) {
 
@@ -46,7 +46,7 @@ function ($scope, $location, AuthService) {
 
 }]);
 
-userControllers.controller('registerController',
+userControllers.controller('RegisterController',
 ['$scope', '$location', 'AuthService',
 function ($scope, $location, AuthService) {
 
@@ -57,7 +57,7 @@ function ($scope, $location, AuthService) {
         $scope.disabled = true;
 
         // call register from service
-        AuthService.register($scope.registerForm.username, $scope.registerForm.password)
+        AuthService.register($scope.registerForm.username, $scope.registerForm.password, $scope.registerForm.email, $scope.registerForm.name)
         // handle success
         .then(function () {
             $location.path('/login');

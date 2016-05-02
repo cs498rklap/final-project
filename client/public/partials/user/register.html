@@ -1,21 +1,19 @@
 <div class="row">
     <h1>Register</h1>
     <div ng-show="error" class="alert-box warning">{{errorMessage}}</div>
-    <form class="form" ng-submit="register()">
+    <form ng-submit="register()">
         <label>Name
-            <input type="text" class="form-control" name="name" ng-model="registerForm.name" required>
+            <input type="text" class="columns small-12" name="name" ng-model="registerForm.name" required>
         </label>
         <label>Username
-            <input type="text" class="form-control" name="username" ng-model="registerForm.username" required>
+            <input type="text" class="columns small-12" name="username" ng-model="registerForm.username" required>
         </label>
         <label>Email
-            <input type="email" class="form-control" name="email" ng-model="registerForm.email" required>
+            <input type="email" class="columns small-12" name="email" ng-model="registerForm.email" required>
         </label>
         <label>Password
-            <input type="password" class="form-control" name="password" ng-model="registerForm.password" required>
+            <input type="password" class="columns small-12" name="password" ng-model="registerForm.password" required>
         </label>
-        <div>
-            <button type="submit" class="success button" ng-disabled="disabled">Register</button>
-        </div>
+        <button type="submit" class="success button" ng-disabled="disabled">Register</button>
     </form>
 </div>
