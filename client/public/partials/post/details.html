@@ -9,8 +9,8 @@
         </div>
         <div class="columns small-12 medium-4">
             <p>{{post.timestamp | date: 'MMMM d, yyyy'}}</p>
-            <!-- TODO: only display if the user name is the same as the logged user name -->
-            <a ng-show="post.author == user.username" href="#/edit-post/{{post._id}}"><button class="button success">Edit</button></a>
+            <a ng-show="post.user == user._id" href="#/edit-post/{{post._id}}"><button class="button success">Edit</button></a>
+            <button ng-show="post.user == user._id" ng-click="deletePost()" class="button alert">Delete</button>
         </div>
     </div>
     <div class="row">
@@ -33,8 +33,8 @@
                 <button type="button" class="button" ng-click="getPost(post._id)">Cancel</button>
                 <div class="callout alert" ng-show="commentError[$index] || commentError[$index].length > 0">{{commentError[$index]}}</div>
             </form>
-            <button class="button success" ng-show="!edit[$index] && comment.username == user.username" ng-click="edit[$index] = true">Edit</button>
-            <button class="button alert" ng-show="comment.username == user.username" ng-click="deleteComment(comment)">Delete</button>
+            <button class="button success" ng-show="!edit[$index] && comment.userid == user._id" ng-click="edit[$index] = true">Edit</button>
+            <button class="button alert" ng-show="comment.userid == user._id" ng-click="deleteComment(comment)">Delete</button>
         </div>
     </div>
     <form ng-submit="addComment()">

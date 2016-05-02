@@ -28,6 +28,7 @@ postControllers.controller('PostIndividualController', ['$scope', '$routeParams'
         } else {
             var comment = {
                 username: $scope.user.username,
+                userid: $scope.user._id,
                 text: $scope.newComment,
                 timestamp: Date.now()
             };
@@ -83,13 +84,11 @@ postControllers.controller('PostIndividualController', ['$scope', '$routeParams'
     };
 
     $scope.addTag = function() {
-        console.log($scope.post.tags);
-        console.log($scope.addedTag);
-        console.log($scope.post.tags.indexOf($scope.addedTag));
-        if ($scope.post.tags.indexOf($scope.addedTag) >= 0)
-        $scope.error = 'You\'ve already added this tag.';
-        else if ($scope.addedTag.length > 0)
-        $scope.post.tags.push($scope.addedTag);
+        if ($scope.post.tags.indexOf($scope.addedTag) >= 0) {
+            $scope.error = 'You\'ve already added this tag.';
+        } else if ($scope.addedTag.length > 0) {
+            $scope.post.tags.push($scope.addedTag);
+        }
         $scope.addedTag = '';
     };
 
@@ -108,7 +107,6 @@ postControllers.controller('PostIndividualController', ['$scope', '$routeParams'
                 content: $scope.post.content,
                 tags: $scope.post.tags
             };
-            console.log(params);
             PostIndividual.update($scope.post._id, params).then(function(response) {
                 $scope.error = '';
                 $location.path('/posts/' + $scope.post._id);
@@ -116,6 +114,14 @@ postControllers.controller('PostIndividualController', ['$scope', '$routeParams'
                 $scope.error = error.message;
             });
         }
+    };
+
+    $scope.deletePost = function() {
+        PostIndividual.delete($scope.post._id).then(function(response) {
+            $location.path('/posts');
+        }, function(error) {
+            $scope.error = error.message;
+        });
     };
 
     $scope.initialize = function() {

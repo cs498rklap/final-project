@@ -29,7 +29,7 @@ dashboardControllers.controller('DashboardController', ['$scope', 'Jobs', 'Posts
         }).then(function(user) {
             $scope.user = user.data.data;
             var params = {
-                'where': {'author': $scope.user.username}
+                'where': {'user': $scope.user._id}
             };
             return Posts.getWithQuery(params);
         }, function(error) {
