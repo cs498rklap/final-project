@@ -82,7 +82,7 @@ jobsControllers.controller('JobListController', ['$scope', 'Jobs', function($sco
 
 }]);
 
-jobsControllers.controller('JobAddController', ['$scope', 'Jobs', function($scope, Jobs) {
+jobsControllers.controller('JobAddController', ['$scope', 'Jobs', 'AuthService', function($scope, Jobs, AuthService) {
 
     $scope.posting = false;
 
@@ -97,6 +97,7 @@ jobsControllers.controller('JobAddController', ['$scope', 'Jobs', function($scop
     $scope.deadline = "";
     $scope.description = "";
     $scope.tags = "";
+    $scope.author = "";
 
 
     $scope.titleError = false;
@@ -117,84 +118,100 @@ jobsControllers.controller('JobAddController', ['$scope', 'Jobs', function($scop
             return;
         }
         $scope.posting = true;
-        $scope.titleError = false;
-        $scope.companyError = false;
-        $scope.cityError = false;
-        $scope.stateError = false;
-        $scope.requiredFieldError = false;
+        AuthService.getUserInformation().
+        success(function (data) {
+            var userObject = data["data"];
+            $scope.author = userObject.name;
+            $scope.user = userObject.username;
+            $scope.titleError = false;
+            $scope.companyError = false;
+            $scope.cityError = false;
+            $scope.stateError = false;
+            $scope.requiredFieldError = false;
 
-        $scope.postSuccess = false;
-        $scope.postError = false;
+            $scope.postSuccess = false;
+            $scope.postError = false;
 
-        $scope.postErrorMessage = "";
+            $scope.postErrorMessage = "";
 
-        if($scope.title == undefined || $scope.title == "") {
-            $scope.titleError = true;
-            $scope.requiredFieldError = true;
-        }
-        if($scope.company == undefined || $scope.company == "") {
-            $scope.companyError = true;
-            $scope.requiredFieldError = true;
-        }
-        if($scope.city == undefined || $scope.city == "") {
-            $scope.cityError = true;
-            $scope.requiredFieldError = true;
-        }
-        if($scope.state.name == undefined || $scope.state.name == "") {
-            $scope.stateError = true;
-            $scope.requiredFieldError = true;
-        }
-        if($scope.requiredFieldError) {
-            $scope.postError=true;
-            $scope.postErrorMessage="Required field missing."
-            $scope.posting=false;
-            return;
-        }
+            if($scope.title == undefined || $scope.title == "") {
+                $scope.titleError = true;
+                $scope.requiredFieldError = true;
+            }
+            if($scope.company == undefined || $scope.company == "") {
+                $scope.companyError = true;
+                $scope.requiredFieldError = true;
+            }
+            if($scope.city == undefined || $scope.city == "") {
+                $scope.cityError = true;
+                $scope.requiredFieldError = true;
+            }
+            if($scope.state.name == undefined || $scope.state.name == "") {
+                $scope.stateError = true;
+                $scope.requiredFieldError = true;
+            }
+            if($scope.requiredFieldError) {
+                $scope.postError=true;
+                $scope.postErrorMessage="Required field missing."
+                $scope.posting=false;
+                return;
+            }
 
-        var tagsArray = [];
-        if($scope.tags != undefined && $scope.tags!="") {
-            tagsArray = $scope.tags.split(',');
-        }
+            var tagsArray = [];
+            if($scope.tags != undefined && $scope.tags!="") {
+                tagsArray = $scope.tags.split(',');
+            }
 
-        var postBody = {
-            "title": $scope.title,
-            "company": $scope.company,
-            "city": $scope.city,
-            "state": $scope.state.abbreviation,
-            "link": $scope.link,
-            "deadline": $scope.deadline,
-            "description": $scope.description,
-            "tags": tagsArray
-        };
+            var postBody = {
+                "user" : $scope.user,
+                "author" : $scope.author,
+                "title": $scope.title,
+                "company": $scope.company,
+                "city": $scope.city,
+                "state": $scope.state.abbreviation,
+                "link": $scope.link,
+                "deadline": $scope.deadline,
+                "description": $scope.description,
+                "tags": tagsArray
+            };
 
-        Jobs.post(postBody).
-        success( function (data){
-            $scope.title = "";
-            $scope.company = "";
-            $scope.city = "";
-            $scope.state = {'name': "", 'abbreviation': ""};
-            $scope.link = "";
-            $scope.tags = "";
-            $scope.deadline = "";
-            $scope.description = "";
-            $scope.tags = "";
-            $scope.posting=false;
-            $scope.postSuccess=true;
+            Jobs.post(postBody).
+            success( function (data){
+                $scope.title = "";
+                $scope.company = "";
+                $scope.city = "";
+                $scope.state = {'name': "", 'abbreviation': ""};
+                $scope.link = "";
+                $scope.tags = "";
+                $scope.deadline = "";
+                $scope.description = "";
+                $scope.tags = "";
+                $scope.author = "";
+                $scope.user = "";
+                $scope.posting=false;
+                $scope.postSuccess=true;
+            }).
+            error(function (data) {
+                $scope.posting=false;
+                if(data == undefined || data == null) {
+                    $scope.postErrorMessage = "Unable to connect to database. Could not post new job.";
+                }
+                else {
+                    $scope.postErrorMessage = data["message"];
+                }
+                $scope.postError=true;
+            });
         }).
         error(function (data) {
             $scope.posting=false;
             if(data == undefined || data == null) {
-                $scope.postErrorMessage = "Unable to connect to database. Could not post new job.";
+                $scope.postErrorMessage = "Unable to retrieve user. Could not post new job.";
             }
             else {
                 $scope.postErrorMessage = data["message"];
             }
             $scope.postError=true;
-
-
         });
-
-
     }
 
 }]);
