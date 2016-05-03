@@ -48,6 +48,9 @@ jobsRoute.post(function(req, res) {
     var description = req.body['description'];
     var tags = req.body['tags'];
     var deadline = req.body['deadline'];
+    var author = req.body['author'];
+    var user = req.body['user'];
+
     var errorMessage = "Validation Error:";
     var deadlinePassed = false;
     if (deadline && deadline!="") {
@@ -63,7 +66,10 @@ jobsRoute.post(function(req, res) {
         errorMessage=errorMessage.concat(" A city is required!");
     }
     if (!state || state=="") {
-        errorMessage=errorMessage.concat(" An state is required!");
+        errorMessage=errorMessage.concat(" A state is required!");
+    }
+    if (!user || user=="" || !author || author=="") {
+        errorMessage=errorMessage.concat(" Failed to pass in authors information properly!");
     }
     if (!(errorMessage=="Validation Error:")){
         res.status(500);
@@ -88,6 +94,8 @@ jobsRoute.post(function(req, res) {
             newJob.company = company;
             newJob.city = city;
             newJob.state = state;
+            newJob.author = author;
+            newJob.user = user;
             if (link) {
                 newJob.link = link;
             }
