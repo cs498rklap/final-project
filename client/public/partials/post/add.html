@@ -4,7 +4,7 @@
             <h2>Create New Post</h2>
         </div>
         <div class="row">
-            <div class="small-12 columns">
+            <div class="small-12 columns" ng-hide="fatalError">
                 <label>
                     <span ng-class="{'red': showTitleError}"> Title: </span><span class="red">*</span>
                     <input type="text" ng-model="newTitle" placeholder="Enter a title for your new post" />
@@ -18,11 +18,11 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" ng-hide="fatalError">
             <div class="small-12 columns">
                 <label>
                     <span ng-class="{'red': showAuthorError}"> Author: </span><span class="red">*</span>
-                    <input type="text" ng-model="newAuthor" placeholder="Enter your name" />
+                    <p>{{user.name}} ({{user.email}})</p>
                 </label>
             </div>
         </div>
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" ng-hide="fatalError">
             <div class="small-12 columns">
                 <label>
                     <span ng-class="{'red': showContentError}"> Content: </span><span class="red">*</span>
@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" ng-hide="fatalError">
             <div class="small-12 columns">
                 <label>
                     Tags:
@@ -56,7 +56,7 @@
                 </label>
             </div>
         </div>
-        <div class="row">
+        <div class="row" ng-hide="fatalError">
             <div class="small-12 columns centered text-center">
                 <button class="button" ng-click="addPost()">Submit</button>
             </div>
@@ -69,6 +69,11 @@
         <div class="message" ng-show="showResultError">
             <div class="row text-center">
                 <span class="alert label"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>  {{resultErrorMessage}}</span>
+            </div>
+        </div>
+        <div class="message" ng-show="fatalError">
+            <div class="row text-center">
+                <span class="alert label"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>  {{fatalErrorMessage}}</span>
             </div>
         </div>
     </form>

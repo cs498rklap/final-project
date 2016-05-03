@@ -1,11 +1,9 @@
-// Add any custom Sass & CSS here
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css');
 
 .error {
     color: $red;
 }
 
-// Add any custom Sass & CSS here
 .top-bar {
     font-weight: bold;
     background:  $bright-green;
@@ -96,6 +94,7 @@ h6 {
 
 .posts-list {
     list-style-type: none;
+    margin: 0;
 }
 
 .radio-button {
