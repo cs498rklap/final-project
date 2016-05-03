@@ -15,10 +15,11 @@ postsServices.factory('Posts', function($http) {
 		getById : function(postId) {
 			return $http.get('http://localhost:3000/api/posts/'+postId);
 		},
-		post : function (newTitle, newAuthor, newContent, newTags) {
+		post : function (newTitle, newAuthor, newUser, newContent, newTags) {
 			var requestBody = {
 				title: newTitle,
 				author: newAuthor,
+				user: newUser,
 				content: newContent,
 				tags: newTags
 			};

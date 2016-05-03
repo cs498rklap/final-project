@@ -1,3 +1,6 @@
+/* External Resources:
+ *  http://stackoverflow.com/questions/3305561/how-do-i-query-mongodb-with-like */
+
 var express = require('express');
 var Posts = require('./../models/post');
 var router = express.Router();
@@ -80,11 +83,32 @@ postsRoute.post(function(req, res) {
     var title = req.body['title'];
     var author = req.body['author'];
     var content = req.body['content'];
+    var user = req.body['user'];
 
     // Force required parameters to be defined before posting to the database:
+    if( (title == undefined || title == "") && (author == undefined || author == "") && (content == undefined || content == "") && (user == undefined || user == "" || user == [])) {
+        res.status(500);
+        res.json({ message: "Validation Error: A title is required! An author is required! Content is required! A user is required!", data: [] });
+        return;
+    }
     if( (title == undefined || title == "") && (author == undefined || author == "") && (content == undefined || content == "") ) {
         res.status(500);
         res.json({ message: "Validation Error: A title is required! An author is required! Content is required!", data: [] });
+        return;
+    }
+    if( (title == undefined || title == "") && (author == undefined || author == "") && (user == undefined || user == "" || user == []) ) {
+        res.status(500);
+        res.json({ message: "Validation Error: A title is required! An author is required! A user is required!", data: [] });
+        return;
+    }
+    if( (title == undefined || title == "") && (user == undefined || user == "" || user == []) && (content == undefined || content == "") ) {
+        res.status(500);
+        res.json({ message: "Validation Error: A title is required! A user is required! Content is required!", data: [] });
+        return;
+    }
+    if( (user == undefined || user == "" || user == []) && (author == undefined || author == "") && (content == undefined || content == "") ) {
+        res.status(500);
+        res.json({ message: "Validation Error: A user is required! An author is required! Content is required!", data: [] });
         return;
     }
     if ( (title == undefined || title == "") && (author == undefined || author == "") ) {
@@ -97,9 +121,24 @@ postsRoute.post(function(req, res) {
         res.json({ message: "Validation Error: A title is required! Content is required!", data: [] });
         return;
     }
+    if ( (title == undefined || title == "") && (user == undefined || user == "" || user == []) ) {
+        res.status(500);
+        res.json({ message: "Validation Error: A title is required! A user is required!", data: [] });
+        return;
+    }
     if ( (author == undefined || author == "") && (content == undefined || content == "") ) {
         res.status(500);
         res.json({ message: "Validation Error: An author is required! Content is required!", data: [] });
+        return;
+    }
+    if ( (author == undefined || author == "") && (user == undefined || user == "" || user == []) ) {
+        res.status(500);
+        res.json({ message: "Validation Error: An author is required! A user is required!", data: [] });
+        return;
+    }
+    if ( (user == undefined || user == "" || user == []) && (content == undefined || content == "") ) {
+        res.status(500);
+        res.json({ message: "Validation Error: A user is required! Content is required!", data: [] });
         return;
     }
     if ( ((title == undefined || title == "")) ) {
@@ -117,6 +156,11 @@ postsRoute.post(function(req, res) {
         res.json({ message: "Validation Error: Content is required!", data: [] });
         return;
     }
+    if ( (user == undefined || content == "" || user == []) ) {
+        res.status(500);
+        res.json({ message: "Validation Error: A user is required!", data: [] });
+        return;
+    }
 
     // Optional:
     var tags = req.body['tags'];
@@ -131,6 +175,7 @@ postsRoute.post(function(req, res) {
     var newPost = new Posts();
     newPost.title = title;
     newPost.author = author;
+    newPost.user = user;
     newPost.content = content;
     newPost.tags = tags;
     newPost.comments = comments;

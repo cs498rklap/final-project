@@ -163,13 +163,14 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 }]);
 
 /* Add  Post  Controller ---------------------------------------------------------------------------------- */
-postsControllers.controller('AddPostController', ['$scope', 'Posts', function($scope, Posts) {
+postsControllers.controller('AddPostController', ['$scope', 'Posts', 'AuthService', function($scope, Posts, AuthService) {
 	/* Variables Used in This Controller */
 	// Data:
 	$scope.newTitle = "";
 	$scope.newAuthor = "";
 	$scope.newContent = "";
 	$scope.newTags = "";
+	$scope.user = [];
 	// Errors:
 	$scope.showTitleError = false;
 	$scope.showAuthorError = false;
@@ -177,10 +178,13 @@ postsControllers.controller('AddPostController', ['$scope', 'Posts', function($s
 	$scope.showResultError = false;
 	$scope.showResultSuccess = false;
 	$scope.error = false;
+	$scope.fatalError = false;
 	$scope.prevPostName = "";
 	$scope.resultErrorMessage = "";
+	$scope.fatalErrorMessage = "";
 
 	/* Functions Used in This Controller */
+	// Add a post to the database using the given information
 	$scope.addPost = function() {
 		// Reset status messages
 		$scope.showTitleError = false;
@@ -189,6 +193,7 @@ postsControllers.controller('AddPostController', ['$scope', 'Posts', function($s
 		$scope.showResultError = false;
 		$scope.showResultSuccess = false;
 		$scope.error = false;
+		$scope.fatalError = false;
 
 		// Force required fields be filled before submitting request
 		if($scope.newTitle == undefined || $scope.newTitle == "") {
@@ -214,7 +219,7 @@ postsControllers.controller('AddPostController', ['$scope', 'Posts', function($s
 		}
 
 		// Send the new post data to the API
-		Posts.post($scope.newTitle, $scope.newAuthor, $scope.newContent, newTagsArray).success(function(data) {
+		Posts.post($scope.newTitle, $scope.newAuthor, $scope.user, $scope.newContent, newTagsArray).success(function(data) {
 			$scope.showResultSuccess = true;
 			$scope.prevPostName = $scope.newTitle;
 		}).error(function(data) {
@@ -227,4 +232,19 @@ postsControllers.controller('AddPostController', ['$scope', 'Posts', function($s
 			$scope.showResultError = true;
 		});
 	};
+
+	// Get the information about the currently logged in user from the API
+	$scope.getCurrentUser = function() {
+		AuthService.getUserInformation().success(function(data) {
+			$scope.user = data["data"];
+			$scope.newAuthor = $scope.user.name;
+		}).error(function(data) {
+			$scope.fatalError = true;
+			$scope.fatalErrorMessage = "Unable to retrieve your user information, which is required to author a new post."
+		});
+	};
+
+	/* Code to run automatically on page load: */
+	$scope.getCurrentUser();
+
 }]);
