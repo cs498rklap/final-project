@@ -259,6 +259,7 @@ postsControllers.controller('AddPostController', ['$scope', '$location', 'Posts'
 	$scope.getCurrentUser = function() {
 		AuthService.getUserInformation().success(function(data) {
 			$scope.user = data["data"];
+			console.log($scope.user);
 			$scope.newAuthor = $scope.user.name;
 			console.log($location.path());
 		}).error(function(data) {

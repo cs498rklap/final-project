@@ -16,7 +16,7 @@ postServices.factory('PostIndividual', function($http) {
         },
         delete: function(id) {
             var baseUrl = 'http://localhost:3000';
-            return $http.delete(baseUrl + '/api/users/' + id);
+            return $http.delete(baseUrl + '/api/posts/' + id);
         }
     };
 });
