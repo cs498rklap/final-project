@@ -11,6 +11,7 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 	$scope.currentPage = 1;
 	$scope.numPages = 1;
 	$scope.maxPostsPerPage = 6;
+	$scope.halfMaxPageNumbers = 2;
 	// Sorting:
 	$scope.sortType = "timestamp";
 	$scope.sortDirection = "-1";
@@ -61,14 +62,16 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 					$scope.updatePagesList(0, 0);
 				}
 				// Trim the length of the content shown to the user if it is too long
+				// Format the date strings per the user's local date settings
 				else {
 					$scope.postsList.forEach(function(post) {
 						if(post.content.length > $scope.maxContentLength) {
 							post.content = post.content.substring(0, $scope.maxContentLength);
 							post.content += ". . .";
 						}
+						post.timestamp = new Date(post.timestamp).toLocaleString();
 					});
-					$scope.updatePagesList(1, $scope.numPages);
+					$scope.updatePagesList($scope.currentPage-$scope.halfMaxPageNumbers, $scope.currentPage+$scope.halfMaxPageNumbers);
 				}
 			}).error(function(data) { // Error getting the results for this page
 				if(typeof data == undefined || data == null) {
@@ -95,14 +98,31 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 	// Will just contain '0' if there are no results
 	// Otherwise will contain '1', '2', ... 'X', where X is the last page number
 	$scope.updatePagesList = function(startPage, endPage) {
-		if(startPage == "0") {
+		if(startPage == "0" && $scope.numPages == "0") {
 			$scope.pagesList = ["0"];
+			return;
 		}
-		else {
-			$scope.pagesList = [];
-			for(var index = startPage; index <= endPage; index++) {
+		$scope.pagesList = [];
+		if(startPage <= 0 && endPage > $scope.numPages) {
+			for(var index = 1; index <= $scope.numPages; index++) {
 				$scope.pagesList.push(index);
 			}
+			return;
+		}
+		if(startPage <= 0) {
+			for(var index = 1; index <= endPage; index++) {
+				$scope.pagesList.push(index);
+			}
+			return;
+		}
+		if(endPage > $scope.numPages) {
+			for(var index = startPage; index <= $scope.numPages; index++) {
+				$scope.pagesList.push(index);
+			}
+			return;
+		}
+		for(var index = startPage; index <= endPage; index++) {
+			$scope.pagesList.push(index);
 		}
 	};
 
@@ -163,7 +183,7 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 }]);
 
 /* Add  Post  Controller ---------------------------------------------------------------------------------- */
-postsControllers.controller('AddPostController', ['$scope', 'Posts', 'AuthService', function($scope, Posts, AuthService) {
+postsControllers.controller('AddPostController', ['$scope', '$location', 'Posts', 'AuthService', function($scope, $location, Posts, AuthService) {
 	/* Variables Used in This Controller */
 	// Data:
 	$scope.newTitle = "";
@@ -222,6 +242,8 @@ postsControllers.controller('AddPostController', ['$scope', 'Posts', 'AuthServic
 		Posts.post($scope.newTitle, $scope.newAuthor, $scope.user, $scope.newContent, newTagsArray).success(function(data) {
 			$scope.showResultSuccess = true;
 			$scope.prevPostName = $scope.newTitle;
+			// Go back to the list of posts after successfully creating this new post
+			$location.path("/posts");
 		}).error(function(data) {
 			if(data == undefined || data == null) {
 				$scope.resultErrorMessage = "Error connecting to the API.  Unable to add the new post.";
@@ -238,6 +260,7 @@ postsControllers.controller('AddPostController', ['$scope', 'Posts', 'AuthServic
 		AuthService.getUserInformation().success(function(data) {
 			$scope.user = data["data"];
 			$scope.newAuthor = $scope.user.name;
+			console.log($location.path());
 		}).error(function(data) {
 			$scope.fatalError = true;
 			$scope.fatalErrorMessage = "Unable to retrieve your user information, which is required to author a new post."
