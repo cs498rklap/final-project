@@ -82,7 +82,7 @@ jobsControllers.controller('JobListController', ['$scope', 'Jobs', function($sco
 
 }]);
 
-jobsControllers.controller('JobAddController', ['$scope', 'Jobs', 'AuthService', function($scope, Jobs, AuthService) {
+jobsControllers.controller('JobAddController', ['$scope', '$location', 'Jobs', 'AuthService', function($scope, $location, Jobs, AuthService) {
 
     $scope.posting = false;
 
@@ -122,7 +122,7 @@ jobsControllers.controller('JobAddController', ['$scope', 'Jobs', 'AuthService',
         success(function (data) {
             var userObject = data["data"];
             $scope.author = userObject.name;
-            $scope.user = userObject.username;
+            $scope.user = userObject._id;
             $scope.titleError = false;
             $scope.companyError = false;
             $scope.cityError = false;
@@ -190,6 +190,7 @@ jobsControllers.controller('JobAddController', ['$scope', 'Jobs', 'AuthService',
                 $scope.user = "";
                 $scope.posting=false;
                 $scope.postSuccess=true;
+                $location.path('/jobs');
             }).
             error(function (data) {
                 $scope.posting=false;
