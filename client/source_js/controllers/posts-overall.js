@@ -14,6 +14,8 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 	// Sorting:
 	$scope.sortType = "timestamp";
 	$scope.sortDirection = "-1";
+	$scope.searchTerm = "";
+	$scope.searchType = "title";
 	// Errors:
 	$scope.showGetPostsError = false;
 	$scope.errorMessage = "";
@@ -27,8 +29,16 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 		$scope.showGetPostsError = false;
 		$scope.showNoPostsWarning = false;
 
+		// Check to see if there is a search term
+		var search = "";
+		var searchField = "";
+		if($scope.searchTerm != undefined && $scope.searchTerm != "") {
+			search = $scope.searchTerm;
+			searchField = $scope.searchType;
+		}
+
 		// First count the number of results and pages
-		Posts.get($scope.sortType, $scope.sortDirection, $scope.maxPostsPerPage, 0, true).success(function(data) {
+		Posts.getLike(searchField, search, $scope.sortType, $scope.sortDirection, $scope.maxPostsPerPage, 0, true).success(function(data) {
 			var totalNumResults = data["data"];
 			var skip = 0;
 			if(totalNumResults == 0 || totalNumResults == undefined) {
@@ -37,9 +47,12 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 			} else {
 				$scope.numPages = Math.ceil(totalNumResults / $scope.maxPostsPerPage);
 				skip = ($scope.currentPage-1)*$scope.maxPostsPerPage;
+				if(skip < 0) {
+					skip = 0;
+				}
 			}
 			// Now get the results based on the current page
-			Posts.get($scope.sortType, $scope.sortDirection, $scope.maxPostsPerPage, skip, false).success(function(data) {
+			Posts.getLike(searchField, search, $scope.sortType, $scope.sortDirection, $scope.maxPostsPerPage, skip, false).success(function(data) {
 				$scope.postsList = data["data"];
 				// Show the user a warning if no tasks were returned
 				if($scope.postsList.length == 0) {
@@ -201,7 +214,6 @@ postsControllers.controller('AddPostController', ['$scope', 'Posts', function($s
 		}
 
 		// Send the new post data to the API
-		// newTitle, newAuthor, newContent, newTags
 		Posts.post($scope.newTitle, $scope.newAuthor, $scope.newContent, newTagsArray).success(function(data) {
 			$scope.showResultSuccess = true;
 			$scope.prevPostName = $scope.newTitle;

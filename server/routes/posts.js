@@ -7,7 +7,21 @@ var postsRoute = router.route('/');
 // Get all posts
 postsRoute.get(function(req, res) {
     // Create the Query
-    var query = Posts.find();
+    var findString = req.query["find"];
+    var findField = req.query["findField"];
+    var query = null;
+    if(findField == '"author"' && findString != undefined && findString != "") {
+        query = Posts.find({author: new RegExp(findString.substring(1, findString.length-2), "i")});
+    }
+    else if(findField == '"title"' && findString != undefined && findString != "") {
+        query = Posts.find({title: new RegExp(findString.substring(1, findString.length-2), "i")});
+    }
+    else if(findField == '"tags"' && findString != undefined && findString != "") {
+        query = Posts.find({tags: new RegExp(findString.substring(1, findString.length-2), "i")});
+    }
+    else {
+        query = Posts.find();
+    }
     var queryString = req.query["where"];
     if(queryString == undefined || queryString == "") {
         queryString = "{}";
