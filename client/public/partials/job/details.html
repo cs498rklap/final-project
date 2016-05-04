@@ -1,6 +1,6 @@
 <div class="row">
     <h1 class="title text-center">{{job.title}}</h1>
-    <h4 class="text-center">{{job.city}}, {{job.state}}</h4>
+    <h4 class="text-center">{{job.company}} <small>{{job.city}}, {{job.state}}</small></h4>
     <div class="columns small-12">
         <p>{{job.description}}</p>
         <h6>Deadline: <span ng-if="job.deadline">{{job.deadline | date: 'MMMM d, yyyy'}}</span><span ng-if="!job.deadline">Rolling</span></h6>
