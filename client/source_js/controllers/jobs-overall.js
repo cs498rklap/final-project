@@ -1,7 +1,7 @@
 var jobsControllers = angular.module('jobs.controllers', []);
 
 jobsControllers.controller('JobListController', ['$scope', 'Jobs', function($scope, Jobs) {
-    var jobsPerPage = 4;
+    var jobsPerPage = 8;
     $scope.refresh = function () {
         if ($scope.field=='state'){
             $scope.which={state:$scope.state};
@@ -103,10 +103,12 @@ jobsControllers.controller('JobAddController', ['$scope', '$location', 'Jobs', '
     $scope.city = "";
     $scope.state = {'name': "", 'abbreviation': ""};
     $scope.link = "";
-    $scope.tags = "";
+    //$scope.tags = "";
     $scope.deadline = "";
     $scope.description = "";
-    $scope.tags = "";
+    //$scope.tags = "";
+    $scope.newTag = "";
+	$scope.newTags = [];
     $scope.author = "";
 
 
@@ -121,6 +123,19 @@ jobsControllers.controller('JobAddController', ['$scope', '$location', 'Jobs', '
 
     $scope.postSuccessMessage = "";
     $scope.postErrorMessage = "";
+
+    $scope.addTag = function() {
+        if ($scope.newTags.indexOf($scope.newTag) >= 0) {
+            $scope.tagError = 'You\'ve already added this tag.';
+        } else if ($scope.newTag.length > 0) {
+            $scope.newTags.push($scope.newTag);
+        }
+        $scope.newTag = '';
+    };
+
+	$scope.removeTag = function(index) {
+        $scope.newTags.splice(index, 1);
+    };
 
     $scope.postJob = function () {
         //Prevent repeated posting.
@@ -167,10 +182,10 @@ jobsControllers.controller('JobAddController', ['$scope', '$location', 'Jobs', '
                 return;
             }
 
-            var tagsArray = [];
+            /*var tagsArray = [];
             if($scope.tags != undefined && $scope.tags!="") {
                 tagsArray = $scope.tags.split(',');
-            }
+            }*/
 
             var postBody = {
                 "user" : $scope.user,

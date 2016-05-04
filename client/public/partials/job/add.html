@@ -1,21 +1,21 @@
-<div class="row text-left">
+<div class="row">
     <div class="small-12 columns">
-        <h1>New Job Listing</h1>
+        <h2 class="title text-center">Create New Job Listing</h2>
     </div>
     <div class="small-12 columns">
-        <label><span>Job Title</span><span>*</span></label>
+        <label><span>Job Title</span> <span class="error">*</span></label>
         <input type="text" ng-model="title" placeholder="Enter the job title">
     </div>
     <div class="small-12 columns">
-        <label><span>Company</span><span>*</span></label>
+        <label><span>Company</span> <span class="error">*</span></label>
         <input type="text" ng-model="company" placeholder="What company is this job under?">
     </div>
     <div class="small-12 medium-8 columns">
-        <label><span>City</span><span>*</span></label>
+        <label><span>City</span> <span class="error">*</span></label>
         <input type="text" ng-model="city" placeholder="City of the job">
     </div>
     <div class="small-12 medium-4 columns">
-        <label><span>State</span><span>*</span></label>
+        <label><span>State</span> <span class="error">*</span></label>
         <select ng-options="st.name for st in states"
         ng-model="state"></select>
     </div>
@@ -34,27 +34,19 @@
         <input type="text" ng-model="description" placeholder="Write the job description">
     </div>
     <div class="small-12 columns">
-        <label><span>Tags</span></label>
-        <input type="text" ng-model="tags" placeholder="Enter some tags, with a comma between each">
+        <label>
+            Tags:
+            <input type="text" ng-model="newTag" placeholder="Type a tag and press Enter" ng-keyup="$event.keyCode == 13 && addTag()" />
+        </label>
+        <p><span class="info label" ng-repeat="tag in newTags">{{tag}}<a ng-click="removeTag($index)"><i class="fa fa-times"></i></a></span></p>
+        <span ng-show="tagError || tagError.length > 0" class="alert label"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>{{tagError}}</span>
     </div>
-    <div class="small-8 medium-10 columns">
-        <div class="label success text-center" ng-show="postSuccess">
-            Successfully posted new job.
-        </div>
-        <div class="label alert text-center" ng-show="postError">
+    <div class="small-12 columns">
+        <button class="button success" ng-click="postJob()">Submit</button>
+    </div>
+    <div class="small-12 columns">
+        <div class="callout alert" ng-show="postError">
             {{postErrorMessage}}
         </div>
     </div>
-    <div class="small-4 medium-2 columns clearfix">
-        <button class="float-right button success" ng-click="postJob()">Publish</button>
-    </div>
 </div>
-    <!--<select ng-options="st.name for st in states"
-            ng-model="state"
-            ng-change="reloadCities()"></select>
-
-        <select ng-model="city">
-            <option ng-repeat="ct in cities | orderBy:'ct.name' " value="{{ct.name}}">
-                {{ct.name}}, {{ct.full_county_name}}
-            </option>
-        </select>-->

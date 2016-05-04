@@ -1,1 +1,23 @@
 // Insert your mixins
+@mixin menu-link {
+    color: $white;
+    &:hover {
+        color: $light-gray;
+    }
+}
+
+@mixin pressed-top {
+    top: 0;
+    left: 0;
+}
+
+@mixin regular-link {
+    color: $dark-green;
+    &:hover {
+        color: $dark-purple;
+    }
+}
+
+@mixin light-gray-border {
+    border: 1px solid $light-gray;
+}

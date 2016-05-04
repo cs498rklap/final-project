@@ -3,66 +3,69 @@
         <ul class="posts-list">
             <li>
                 <div class="row text-center">
-                    <h1>Advice Column</h1>
+                    <h1 class="title">Advice Column</h1>
                 </div>
             </li>
             <li>
-                <div class="row text-center">
-                    <a class="success button" href="#/addpost">Make a New Post!</a>
+                <div class="row">
+                    <div class="columns small-12 medium-10 medium-offset-1 center">
+                        <p>One of the core aspects of this community is the ability to be able to share your experiences with others. If you'd like to write a post, click <a href="#/addpost" class="post-link">here.</a></p>
+                    </div>
                 </div>
             </li>
             <li>
                 <div class="row" ng-hide="showGetPostsError">
-                    <div class="small-6 columns">
+                    <div class="small-12 medium-6 large-6 columns">
                         <label>
                         Search:
-                        <input type="text" ng-model="searchTerm" placeholder="Type your search terms here">
+                            <div class="input-group">
+                                <input class="input-group-field" type="text" ng-model="searchTerm" placeholder="Search Term">
+                                <div class="input-group-button">
+                                    <button class="button" ng-click="loadPosts()">Search</button>
+                                </div>
+                            </div>
                         </label>
-                        <label>
-                            <select ng-model="searchType">
-                                <option ng-value="title">title</option>
-                                <option ng-value="author">author</option>
-                                <option ng-value="tags">tags</option>
-                            </select>
-                        </label>
-                        <button class="button" ng-click="loadPosts()">Search</button>
                     </div>
-                    <div class="small-3 columns">
+                    <div class="small-12 medium-6 large-3 columns">
                         <label>
                             Sort By:
                             <select ng-model="sortType" ng-change="loadPosts()">
                                 <option ng-value="timestamp">timestamp</option>
                                 <option ng-value="title">title</option>
                                 <option ng-value="author">author</option>
-                                <option ng-value="content">content</option>
                             </select>
                         </label>
                     </div>
-                    <div class="small-3 columns">
+                    <div class="small-12 medium-6 large-3 columns">
                         <label>
-                            Sort Direction: <br>
-                            <input type="radio" ng-model="sortDirection" ng-value="1" ng-click="loadPosts()" /><span class="radio-button"> Ascending</span>
-                            <input type="radio" ng-model="sortDirection" ng-value="-1" ng-click="loadPosts()" /><span class="radio-button"> Descending</span>
+                            Sort Order: <br>
+                            <input type="radio" ng-model="sortDirection" ng-value="1" ng-click="loadPosts()" /> Ascending</input>
+                            <input type="radio" ng-model="sortDirection" ng-value="-1" ng-click="loadPosts()" /> Descending</input>
                         </label>
                     </div>
                 </div>
             </li>
+            <div class="row text-center" ng-hide="showGetPostsError">
+                <ul class="pagination">
+                    <li class="page-arrow" ng-class="currentPage <= 1 ? 'unavailable' : 'arrow'" ng-click="goToFirstPage()"><i class="fa fa-angle-double-left"></i></li>
+                    <li class="page-arrow" ng-class="currentPage <= 1 ? 'unavailable' : 'arrow'" ng-click="previousPage()"><i class="fa fa-angle-left"></i></li>
+                    <li class="page-arrow" ng-repeat="page in pagesList" ng-class="{ 'current': currentPage == page }" ng-click="goToPage(page)"> {{page}} </li>
+                    <li class="page-arrow" ng-class="currentPage >= numPages ? 'unavailable' : 'arrow'" ng-click="nextPage()"> <i class="fa fa-angle-right"></i></li>
+                    <li class="page-arrow" ng-class="currentPage >= numPages ? 'unavailable' : 'arrow'" ng-click="goToLastPage()"> <i class="fa fa-angle-double-right"></i></li>
+                </ul>
+            </div>
             <div class="row">
                 <li ng-repeat="post in postsList" ng-hide="showGetPostsError || showNoPostsWarning">
-                    <div class="small-6 columns posts-grid-item">
-                        <h3>{{post.title}}</h3>
-                        <h6>Author:  {{post.author}}</h6>
-                        <h6>{{post.timestamp}}</h6>
+                    <div class="small-12 medium-6 columns posts-grid-item">
+                        <h3 class="post-list-heading">{{post.title}}</h3>
+                        <h6>Author:  {{post.author}} <small>{{post.timestamp | date: 'MMMM d, yyyy'}}</small></h6>
                         <p>{{post.content}}</p>
-                        <a href="#/posts/{{post._id}}">Read more ...</a>
+                        <p>Tags: <span ng-repeat="tag in post.tags" ng-if="$index < 3" class="info label tag">{{tag}}</span><span ng-if="post.tags.length == 0" class="label default">none</span></p>
+                        <p>Comments: {{post.comments.length}}</p>
+                        <a class="post-link" href="#/posts/{{post._id}}">Read more</a>
                     </div>
                 </li>
             </div>
-            <li>
-                <div class="row text-center" ng-hide="showGetPostsError">
-                    <span ng-click="goToFirstPage()"><< </span><span ng-click="previousPage()"> < </span><span ng-repeat="page in pagesList" ng-class="{ 'page-selected': currentPage == page }" ng-click="goToPage(page)"> {{page}} </span><span ng-click="nextPage()"> > </span><span ng-click="goToLastPage()"> >></span>
-                </div>
-            </li>
             <li class="first-list-item" ng-show="showGetPostsError">
                 <div class="row text-center message">
                     <span class="alert label"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>  {{errorMessage}}</span>
@@ -71,6 +74,17 @@
             <li class="first-list-item" ng-show="showNoPostsWarning">
                 <div class="row text-center message">
                     <span class="warning label no-pads"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>  {{warningMessage}}</span>
+                </div>
+            </li>
+            <li>
+                <div class="row text-center" ng-hide="showGetPostsError">
+                    <ul class="pagination">
+                        <li class="page-arrow" ng-class="currentPage <= 1 ? 'unavailable' : 'arrow'" ng-click="goToFirstPage()"><i class="fa fa-angle-double-left"></i></li>
+                        <li class="page-arrow" ng-class="currentPage <= 1 ? 'unavailable' : 'arrow'" ng-click="previousPage()"><i class="fa fa-angle-left"></i></li>
+                        <li class="page-arrow" ng-repeat="page in pagesList" ng-class="{ 'current': currentPage == page }" ng-click="goToPage(page)"> {{page}} </li>
+                        <li class="page-arrow" ng-class="currentPage >= numPages ? 'unavailable' : 'arrow'" ng-click="nextPage()"> <i class="fa fa-angle-right"></i></li>
+                        <li class="page-arrow" ng-class="currentPage >= numPages ? 'unavailable' : 'arrow'" ng-click="goToLastPage()"> <i class="fa fa-angle-double-right"></i></li>
+                    </ul>
                 </div>
             </li>
         </ul>

@@ -1,5 +1,5 @@
 <div class="row">
-    <h1>Login</h1>
+    <h1 class="text-center title">Login</h1>
     <div ng-show="error" class="callout alert">{{errorMessage}}</div>
     <form ng-submit="login()">
         <div class="columns small-12">
@@ -10,6 +10,8 @@
             <label>Password</label>
             <input type="password" name="password" ng-model="loginForm.password" required>
         </div>
-        <button type="submit" class="success button" ng-disabled="disabled">Login</button>
+        <div class="columns small-12">
+            <button type="submit" class="success button" ng-disabled="disabled">Login</button>
+        </div>
     </form>
 </div>
