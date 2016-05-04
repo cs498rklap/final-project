@@ -11,9 +11,12 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 	$scope.currentPage = 1;
 	$scope.numPages = 1;
 	$scope.maxPostsPerPage = 6;
+	$scope.halfMaxPageNumbers = 2;
 	// Sorting:
 	$scope.sortType = "timestamp";
 	$scope.sortDirection = "-1";
+	$scope.searchTerm = "";
+	$scope.searchType = "title";
 	// Errors:
 	$scope.showGetPostsError = false;
 	$scope.errorMessage = "";
@@ -27,8 +30,16 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 		$scope.showGetPostsError = false;
 		$scope.showNoPostsWarning = false;
 
+		// Check to see if there is a search term
+		var search = "";
+		var searchField = "";
+		if($scope.searchTerm != undefined && $scope.searchTerm != "") {
+			search = $scope.searchTerm;
+			searchField = $scope.searchType;
+		}
+
 		// First count the number of results and pages
-		Posts.get($scope.sortType, $scope.sortDirection, $scope.maxPostsPerPage, 0, true).success(function(data) {
+		Posts.getLike(searchField, search, $scope.sortType, $scope.sortDirection, $scope.maxPostsPerPage, 0, true).success(function(data) {
 			var totalNumResults = data["data"];
 			var skip = 0;
 			if(totalNumResults == 0 || totalNumResults == undefined) {
@@ -37,9 +48,12 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 			} else {
 				$scope.numPages = Math.ceil(totalNumResults / $scope.maxPostsPerPage);
 				skip = ($scope.currentPage-1)*$scope.maxPostsPerPage;
+				if(skip < 0) {
+					skip = 0;
+				}
 			}
 			// Now get the results based on the current page
-			Posts.get($scope.sortType, $scope.sortDirection, $scope.maxPostsPerPage, skip, false).success(function(data) {
+			Posts.getLike(searchField, search, $scope.sortType, $scope.sortDirection, $scope.maxPostsPerPage, skip, false).success(function(data) {
 				$scope.postsList = data["data"];
 				// Show the user a warning if no tasks were returned
 				if($scope.postsList.length == 0) {
@@ -48,14 +62,16 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 					$scope.updatePagesList(0, 0);
 				}
 				// Trim the length of the content shown to the user if it is too long
+				// Format the date strings per the user's local date settings
 				else {
 					$scope.postsList.forEach(function(post) {
 						if(post.content.length > $scope.maxContentLength) {
 							post.content = post.content.substring(0, $scope.maxContentLength);
 							post.content += ". . .";
 						}
+						post.timestamp = new Date(post.timestamp).toLocaleString();
 					});
-					$scope.updatePagesList(1, $scope.numPages);
+					$scope.updatePagesList($scope.currentPage-$scope.halfMaxPageNumbers, $scope.currentPage+$scope.halfMaxPageNumbers);
 				}
 			}).error(function(data) { // Error getting the results for this page
 				if(typeof data == undefined || data == null) {
@@ -82,14 +98,31 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 	// Will just contain '0' if there are no results
 	// Otherwise will contain '1', '2', ... 'X', where X is the last page number
 	$scope.updatePagesList = function(startPage, endPage) {
-		if(startPage == "0") {
+		if(startPage == "0" && $scope.numPages == "0") {
 			$scope.pagesList = ["0"];
+			return;
 		}
-		else {
-			$scope.pagesList = [];
-			for(var index = startPage; index <= endPage; index++) {
+		$scope.pagesList = [];
+		if(startPage <= 0 && endPage > $scope.numPages) {
+			for(var index = 1; index <= $scope.numPages; index++) {
 				$scope.pagesList.push(index);
 			}
+			return;
+		}
+		if(startPage <= 0) {
+			for(var index = 1; index <= endPage; index++) {
+				$scope.pagesList.push(index);
+			}
+			return;
+		}
+		if(endPage > $scope.numPages) {
+			for(var index = startPage; index <= $scope.numPages; index++) {
+				$scope.pagesList.push(index);
+			}
+			return;
+		}
+		for(var index = startPage; index <= endPage; index++) {
+			$scope.pagesList.push(index);
 		}
 	};
 
@@ -150,13 +183,14 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 }]);
 
 /* Add  Post  Controller ---------------------------------------------------------------------------------- */
-postsControllers.controller('AddPostController', ['$scope', 'Posts', function($scope, Posts) {
+postsControllers.controller('AddPostController', ['$scope', '$location', 'Posts', 'AuthService', function($scope, $location, Posts, AuthService) {
 	/* Variables Used in This Controller */
 	// Data:
 	$scope.newTitle = "";
 	$scope.newAuthor = "";
 	$scope.newContent = "";
 	$scope.newTags = "";
+	$scope.user = [];
 	// Errors:
 	$scope.showTitleError = false;
 	$scope.showAuthorError = false;
@@ -164,10 +198,13 @@ postsControllers.controller('AddPostController', ['$scope', 'Posts', function($s
 	$scope.showResultError = false;
 	$scope.showResultSuccess = false;
 	$scope.error = false;
+	$scope.fatalError = false;
 	$scope.prevPostName = "";
 	$scope.resultErrorMessage = "";
+	$scope.fatalErrorMessage = "";
 
 	/* Functions Used in This Controller */
+	// Add a post to the database using the given information
 	$scope.addPost = function() {
 		// Reset status messages
 		$scope.showTitleError = false;
@@ -176,6 +213,7 @@ postsControllers.controller('AddPostController', ['$scope', 'Posts', function($s
 		$scope.showResultError = false;
 		$scope.showResultSuccess = false;
 		$scope.error = false;
+		$scope.fatalError = false;
 
 		// Force required fields be filled before submitting request
 		if($scope.newTitle == undefined || $scope.newTitle == "") {
@@ -201,10 +239,11 @@ postsControllers.controller('AddPostController', ['$scope', 'Posts', function($s
 		}
 
 		// Send the new post data to the API
-		// newTitle, newAuthor, newContent, newTags
-		Posts.post($scope.newTitle, $scope.newAuthor, $scope.newContent, newTagsArray).success(function(data) {
+		Posts.post($scope.newTitle, $scope.newAuthor, $scope.user, $scope.newContent, newTagsArray).success(function(data) {
 			$scope.showResultSuccess = true;
 			$scope.prevPostName = $scope.newTitle;
+			// Go back to the list of posts after successfully creating this new post
+			$location.path("/posts");
 		}).error(function(data) {
 			if(data == undefined || data == null) {
 				$scope.resultErrorMessage = "Error connecting to the API.  Unable to add the new post.";
@@ -215,4 +254,21 @@ postsControllers.controller('AddPostController', ['$scope', 'Posts', function($s
 			$scope.showResultError = true;
 		});
 	};
+
+	// Get the information about the currently logged in user from the API
+	$scope.getCurrentUser = function() {
+		AuthService.getUserInformation().success(function(data) {
+			$scope.user = data["data"];
+			console.log($scope.user);
+			$scope.newAuthor = $scope.user.name;
+			console.log($location.path());
+		}).error(function(data) {
+			$scope.fatalError = true;
+			$scope.fatalErrorMessage = "Unable to retrieve your user information, which is required to author a new post."
+		});
+	};
+
+	/* Code to run automatically on page load: */
+	$scope.getCurrentUser();
+
 }]);

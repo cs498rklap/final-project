@@ -40,9 +40,6 @@ postRoute.put(function(req, res) {
     if (req.body.$push)
         setAttributes.$push = req.body.$push;
 
-    console.log(req.body.tags);
-
-    // TODO: Editing a comment
     var params;
     if (req.body.cid) {
         setAttributes.$set['comments.$.text'] = req.body.ctext;

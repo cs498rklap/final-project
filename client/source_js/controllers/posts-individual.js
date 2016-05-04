@@ -1,6 +1,6 @@
 var postControllers = angular.module('post.controllers', []);
 
-postControllers.controller('PostIndividualController', ['$scope', '$routeParams', '$location', 'PostIndividual', function($scope, $routeParams, $location, PostIndividual) {
+postControllers.controller('PostIndividualController', ['$scope', '$routeParams', '$location', 'PostIndividual', 'AuthService', function($scope, $routeParams, $location, PostIndividual, AuthService) {
     $scope.newComment = '';
     $scope.edit = [];
     $scope.commentError = [];
@@ -12,6 +12,11 @@ postControllers.controller('PostIndividualController', ['$scope', '$routeParams'
             $scope.post = response.data.data;
             $scope.contents = $scope.post.content.split('\n');
             $scope.setEditArray();
+            return AuthService.getUserInformation();
+        }, function(error) {
+            $scope.error = error.data.message;
+        }).then(function(response) {
+            $scope.user = response.data.data;
         }, function(error) {
             $scope.error = error.data.message;
         });
@@ -22,7 +27,8 @@ postControllers.controller('PostIndividualController', ['$scope', '$routeParams'
             $scope.error = "Please enter comment text.";
         } else {
             var comment = {
-                username: 'testUser',
+                username: $scope.user.username,
+                userid: $scope.user._id,
                 text: $scope.newComment,
                 timestamp: Date.now()
             };
@@ -78,13 +84,11 @@ postControllers.controller('PostIndividualController', ['$scope', '$routeParams'
     };
 
     $scope.addTag = function() {
-        console.log($scope.post.tags);
-        console.log($scope.addedTag);
-        console.log($scope.post.tags.indexOf($scope.addedTag));
-        if ($scope.post.tags.indexOf($scope.addedTag) >= 0)
-        $scope.error = 'You\'ve already added this tag.';
-        else if ($scope.addedTag.length > 0)
-        $scope.post.tags.push($scope.addedTag);
+        if ($scope.post.tags.indexOf($scope.addedTag) >= 0) {
+            $scope.error = 'You\'ve already added this tag.';
+        } else if ($scope.addedTag.length > 0) {
+            $scope.post.tags.push($scope.addedTag);
+        }
         $scope.addedTag = '';
     };
 
@@ -103,7 +107,6 @@ postControllers.controller('PostIndividualController', ['$scope', '$routeParams'
                 content: $scope.post.content,
                 tags: $scope.post.tags
             };
-            console.log(params);
             PostIndividual.update($scope.post._id, params).then(function(response) {
                 $scope.error = '';
                 $location.path('/posts/' + $scope.post._id);
@@ -111,6 +114,14 @@ postControllers.controller('PostIndividualController', ['$scope', '$routeParams'
                 $scope.error = error.message;
             });
         }
+    };
+
+    $scope.deletePost = function() {
+        PostIndividual.delete($scope.post._id).then(function(response) {
+            $location.path('/posts');
+        }, function(error) {
+            $scope.error = error.message;
+        });
     };
 
     $scope.initialize = function() {

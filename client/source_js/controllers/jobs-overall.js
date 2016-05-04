@@ -1,8 +1,17 @@
 var jobsControllers = angular.module('jobs.controllers', []);
 
 jobsControllers.controller('JobListController', ['$scope', 'Jobs', function($scope, Jobs) {
-    var jobsPerPage = 1;
+    var jobsPerPage = 4;
     $scope.refresh = function () {
+        if ($scope.field=='state'){
+            $scope.which={state:$scope.state};
+        } else if ($scope.field=='title'){
+            $scope.which={title: { "$regex": $scope.query, "$options": "i" }};
+        } else if ($scope.field=='description') {
+            $scope.which={description: { "$regex": $scope.query, "$options": "i" }};
+        } else {
+            $scope.which="";
+        }
         var queryString= "where="+JSON.stringify($scope.which)+"&sort={"+$scope.orderBy+":"+$scope.order+"}&limit="+jobsPerPage+"&skip="+(($scope.page-1)*jobsPerPage);
         Jobs.get(queryString).success(function (data) {
             $scope.jobs = data['data'];
@@ -11,7 +20,8 @@ jobsControllers.controller('JobListController', ['$scope', 'Jobs', function($sco
             $scope.count = data['data'];
         });
     };
-
+    $scope.field='none';
+    $scope.states=Jobs.states();
     $scope.which = "";
     $scope.orderBy = "dateCreated";
     $scope.order = -1;
@@ -82,7 +92,7 @@ jobsControllers.controller('JobListController', ['$scope', 'Jobs', function($sco
 
 }]);
 
-jobsControllers.controller('JobAddController', ['$scope', 'Jobs', function($scope, Jobs) {
+jobsControllers.controller('JobAddController', ['$scope', '$location', 'Jobs', 'AuthService', function($scope, $location, Jobs, AuthService) {
 
     $scope.posting = false;
 
@@ -97,6 +107,7 @@ jobsControllers.controller('JobAddController', ['$scope', 'Jobs', function($scop
     $scope.deadline = "";
     $scope.description = "";
     $scope.tags = "";
+    $scope.author = "";
 
 
     $scope.titleError = false;
@@ -117,84 +128,101 @@ jobsControllers.controller('JobAddController', ['$scope', 'Jobs', function($scop
             return;
         }
         $scope.posting = true;
-        $scope.titleError = false;
-        $scope.companyError = false;
-        $scope.cityError = false;
-        $scope.stateError = false;
-        $scope.requiredFieldError = false;
+        AuthService.getUserInformation().
+        success(function (data) {
+            var userObject = data["data"];
+            $scope.author = userObject.name;
+            $scope.user = userObject._id;
+            $scope.titleError = false;
+            $scope.companyError = false;
+            $scope.cityError = false;
+            $scope.stateError = false;
+            $scope.requiredFieldError = false;
 
-        $scope.postSuccess = false;
-        $scope.postError = false;
+            $scope.postSuccess = false;
+            $scope.postError = false;
 
-        $scope.postErrorMessage = "";
+            $scope.postErrorMessage = "";
 
-        if($scope.title == undefined || $scope.title == "") {
-            $scope.titleError = true;
-            $scope.requiredFieldError = true;
-        }
-        if($scope.company == undefined || $scope.company == "") {
-            $scope.companyError = true;
-            $scope.requiredFieldError = true;
-        }
-        if($scope.city == undefined || $scope.city == "") {
-            $scope.cityError = true;
-            $scope.requiredFieldError = true;
-        }
-        if($scope.state.name == undefined || $scope.state.name == "") {
-            $scope.stateError = true;
-            $scope.requiredFieldError = true;
-        }
-        if($scope.requiredFieldError) {
-            $scope.postError=true;
-            $scope.postErrorMessage="Required field missing."
-            $scope.posting=false;
-            return;
-        }
+            if($scope.title == undefined || $scope.title == "") {
+                $scope.titleError = true;
+                $scope.requiredFieldError = true;
+            }
+            if($scope.company == undefined || $scope.company == "") {
+                $scope.companyError = true;
+                $scope.requiredFieldError = true;
+            }
+            if($scope.city == undefined || $scope.city == "") {
+                $scope.cityError = true;
+                $scope.requiredFieldError = true;
+            }
+            if($scope.state.name == undefined || $scope.state.name == "") {
+                $scope.stateError = true;
+                $scope.requiredFieldError = true;
+            }
+            if($scope.requiredFieldError) {
+                $scope.postError=true;
+                $scope.postErrorMessage="Required field missing."
+                $scope.posting=false;
+                return;
+            }
 
-        var tagsArray = [];
-        if($scope.tags != undefined && $scope.tags!="") {
-            tagsArray = $scope.tags.split(',');
-        }
+            var tagsArray = [];
+            if($scope.tags != undefined && $scope.tags!="") {
+                tagsArray = $scope.tags.split(',');
+            }
 
-        var postBody = {
-            "title": $scope.title,
-            "company": $scope.company,
-            "city": $scope.city,
-            "state": $scope.state.abbreviation,
-            "link": $scope.link,
-            "deadline": $scope.deadline,
-            "description": $scope.description,
-            "tags": tagsArray
-        };
+            var postBody = {
+                "user" : $scope.user,
+                "author" : $scope.author,
+                "title": $scope.title,
+                "company": $scope.company,
+                "city": $scope.city,
+                "state": $scope.state.abbreviation,
+                "link": $scope.link,
+                "deadline": $scope.deadline,
+                "description": $scope.description,
+                "tags": tagsArray
+            };
 
-        Jobs.post(postBody).
-        success( function (data){
-            $scope.title = "";
-            $scope.company = "";
-            $scope.city = "";
-            $scope.state = {'name': "", 'abbreviation': ""};
-            $scope.link = "";
-            $scope.tags = "";
-            $scope.deadline = "";
-            $scope.description = "";
-            $scope.tags = "";
-            $scope.posting=false;
-            $scope.postSuccess=true;
+            Jobs.post(postBody).
+            success( function (data){
+                $scope.title = "";
+                $scope.company = "";
+                $scope.city = "";
+                $scope.state = {'name': "", 'abbreviation': ""};
+                $scope.link = "";
+                $scope.tags = "";
+                $scope.deadline = "";
+                $scope.description = "";
+                $scope.tags = "";
+                $scope.author = "";
+                $scope.user = "";
+                $scope.posting=false;
+                $scope.postSuccess=true;
+                $location.path('/jobs');
+            }).
+            error(function (data) {
+                $scope.posting=false;
+                if(data == undefined || data == null) {
+                    $scope.postErrorMessage = "Unable to connect to database. Could not post new job.";
+                }
+                else {
+                    $scope.postErrorMessage = data["message"];
+                }
+                $scope.postError=true;
+            });
         }).
         error(function (data) {
             $scope.posting=false;
             if(data == undefined || data == null) {
-                $scope.postErrorMessage = "Unable to connect to database. Could not post new job.";
+                $scope.postErrorMessage = "Unable to retrieve user. Could not post new job.";
             }
             else {
                 $scope.postErrorMessage = data["message"];
             }
             $scope.postError=true;
-
-
         });
-
-
     }
 
 }]);

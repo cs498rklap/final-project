@@ -16,9 +16,29 @@
             <li ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="nextPage();">></li>
             <li ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="lastPage();">&raquo</li>
         </ul>
-    </span>
-    <span class="new-post float-right">
-        <a class="success button" href="#/addjob">New Post</a>
+
+        <span>Search Field:</span>
+        <span>
+            <select ng-model="field">
+                <option value="none">None</option>
+                <option value="state">State</option>
+                <option value="title">Job Title</option>
+                <option value="description">Description</option>
+            </select>
+        </span>
+        <span ng-show="field=='state'">
+            <span>State:</span>
+            <select ng-options="st.abbreviation as st.name for st in states"
+                    ng-model="state">
+            </select>
+        </span>
+        <span ng-show="field=='title'||field=='description'">
+            <span>Search Query:</span>
+            <span>
+                <input type="text" ng-model="query" placeholder="Enter search query...">
+            </span>
+        </span>
+        <span class="button success" ng-click="page=1;refresh()">Search</span>
     </span>
 </div>
 
@@ -28,7 +48,7 @@
             {{job.title}} - {{job.city}}, {{job.state}}
         </span>
         <span class="float-right">
-            Author - {{job.dateCreated}}
+            {{job.author}} - {{job.dateCreated}}
         </span>
     </a>
 </div>
@@ -44,8 +64,28 @@
             <li ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="nextPage();">></li>
             <li ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="lastPage();">&raquo</li>
         </ul>
-    </span>
-    <span class="new-post float-right">
-        <a class="success button" href="#/addjob">New Post</a>
+        <span>Search Field:</span>
+        <span>
+            <select ng-model="field">
+                <option value="none">None</option>
+                <option value="state">State</option>
+                <option value="title">Job Title</option>
+                <option value="description">Description</option>
+            </select>
+        </span>
+        <span ng-show="field=='state'">
+            <span>State:</span>
+            <select ng-options="st.name for st in states"
+                    ng-model="state">
+            </select>
+        </span>
+        <span ng-show="field=='title'||field=='description'">
+            <span>Search Query:</span>
+            <span>
+                <input type="text" ng-model="query" placeholder="Enter search query...">
+            </span>
+        </span>
+        <span class="button success" ng-click="refresh()">Search</span>
+
     </span>
 </div>

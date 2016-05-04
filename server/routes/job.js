@@ -6,36 +6,39 @@ var jobRoute = router.route('/:id');
 
 jobRoute.get(function(req, res) {
     Job.findById(req.params.id, function(err, job) {
-        if(err || !job) {
-            res.status(404).send({ message: 'Job not found', data: []});
-        }
-        else {
-            res.status(200).send({ message: 'Job found', data: job});
+        if (err) {
+            res.status(500).json({ message: 'Unable to retrieve job with specified id', data: err });
+        } else if (!job) {
+            res.status(404).json({ message: 'Job not found'});
+        } else {
+            res.status(200).json({ message: 'Job found', data: job});
         }
     });
 });
 
 jobRoute.put(function(req, res) {
     Job.findById(req.params.id, function(err, job) {
-        if(err || !job) {
-            res.status(404).send({ message: 'Job not found', data: []});
+        if (err) {
+            res.status(500).json({ message: 'Unable to update job with specified id', data: err });
+        } else if(!job) {
+            res.status(404).json({ message: 'Job not found' });
         }
         else {
             var missing_fields = "";
             if(!req.body.title) {
-                missing_fields += "Please enter a title!";
+                missing_fields += "Please enter a title!\n";
             }
             if(!req.body.company) {
-                missing_fields += "Please enter a company!";
+                missing_fields += "Please enter a company!\n";
             }
             if(!req.body.city) {
-                missing_fields += "Please enter a city!";
+                missing_fields += "Please enter a city!\n";
             }
             if(!req.body.state) {
-                missing_fields += "Please enter a state!";
+                missing_fields += "Please enter a state!\n";
             }
             if(missing_fields !== "") {
-                res.status(404).send({message: missing_fields, data:[]});
+                res.status(404).json({ message: missing_fields });
                 return;
             }
             job.title = req.body.title;
@@ -48,10 +51,10 @@ jobRoute.put(function(req, res) {
             job.tags = req.body.tags;
             job.save(function(err) {
                 if(err) {
-                    res.status(404).send({ message: 'Job could not be updated', data: []});
+                    res.status(500).json({ message: 'Job could not be updated', data: err});
                 }
                 else {
-                    res.status(201).send({ message: 'Job updated', data: job});
+                    res.status(201).json({ message: 'Job updated', data: job});
                 }
             });
         }
@@ -61,10 +64,10 @@ jobRoute.put(function(req, res) {
 jobRoute.delete(function(req, res) {
     Job.remove({_id: req.params.id}, function(err) {
         if(err) {
-            res.status(404).send({ message: 'Job not found', data: []});
+            res.status(404).json({ message: 'Job not found', data: err});
         }
         else {
-            res.status(200).send({ message: 'Deleted job', data: []});
+            res.status(200).json({ message: 'Deleted job'});
         }
     });
 });
