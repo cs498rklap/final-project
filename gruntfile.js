@@ -13,7 +13,6 @@ module.exports = function(grunt) {
           mangle: false
         },
         files: {
-          'client/public/js/script.js': ['client/source_js/script.js'],
           'client/public/js/app.js': ['client/source_js/app.js'],
           'client/public/js/controllers.js': [
               'client/source_js/controllers/posts-individual.js',

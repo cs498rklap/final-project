@@ -58,10 +58,9 @@
                 <li ng-repeat="post in postsList" ng-hide="showGetPostsError || showNoPostsWarning">
                     <div class="small-12 medium-6 columns posts-grid-item">
                         <h3 class="post-list-heading">{{post.title}}</h3>
-                        <h6>Author:  {{post.author}}</h6>
-                        <h6>{{post.timestamp | date: 'MMMM d, yyyy'}}</h6>
+                        <h6>Author:  {{post.author}} <small>{{post.timestamp | date: 'MMMM d, yyyy'}}</small></h6>
                         <p>{{post.content}}</p>
-                        <p>Tags: <span ng-repeat="tag in post.tags" ng-if="$index < 3" class="info label">{{tag}}</span><span ng-if="post.tags.length == 0" class="label default">none</span></p>
+                        <p>Tags: <span ng-repeat="tag in post.tags" ng-if="$index < 3" class="info label tag">{{tag}}</span><span ng-if="post.tags.length == 0" class="label default">none</span></p>
                         <a class="post-link" href="#/posts/{{post._id}}">Read more</a>
                     </div>
                 </li>

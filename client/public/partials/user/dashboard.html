@@ -1,12 +1,12 @@
 <div ng-init="initialize()">
     <div class="row">
         <div class="columns small-12">
-            <h1 class="dashboard-title">Hello {{user.name}}!</h1>
+            <h1 class="title">Hello {{user.name}}!</h1>
         </div>
     </div>
     <div class="row">
         <div class="columns small-12 medium-8 large-9">
-            <h3 class="dashboard-title">Recent Posts</h3>
+            <h3 class="title">Recent Posts</h3>
             <table class="dashboard-table">
                 <tbody>
                     <tr ng-repeat="post in mostRecentPosts">
@@ -21,7 +21,7 @@
             <h6 class="text-center"><a class="dashboard-link" href="#/posts">View More Posts</a></h6>
         </div>
         <div class="columns small-12 medium-4 large-3">
-            <h3 class="dashboard-title">Recent Jobs</h3>
+            <h3 class="title">Recent Jobs</h3>
             <table class="dashboard-table">
                 <tbody>
                     <tr ng-repeat="job in mostRecentJobs">
@@ -37,7 +37,7 @@
     </div>
     <div class="row">
         <div class="columns small-12 medium-8 large-9">
-            <h3 class="dashboard-title">Your Posts</h3>
+            <h3 class="title">Your Posts</h3>
             <table class="dashboard-table">
                 <tbody>
                     <tr ng-repeat="post in myPosts">

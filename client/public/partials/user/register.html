@@ -1,17 +1,17 @@
 <div class="row">
-    <h1>Register</h1>
-    <div ng-show="error" class="alert-box warning">{{errorMessage}}</div>
+    <h1 class="title text-center">Register</h1>
+    <div ng-show="error" class="alert callout">{{errorMessage}}</div>
     <form ng-submit="register()">
-        <label>Name
+        <label>Name <span class="error">*</span>
             <input type="text" class="columns small-12" name="name" ng-model="registerForm.name" required>
         </label>
-        <label>Username
+        <label>Username <span class="error">*</span>
             <input type="text" class="columns small-12" name="username" ng-model="registerForm.username" required>
         </label>
-        <label>Email
+        <label>Email <span class="error">*</span>
             <input type="email" class="columns small-12" name="email" ng-model="registerForm.email" required>
         </label>
-        <label>Password
+        <label>Password <span class="error">*</span>
             <input type="password" class="columns small-12" name="password" ng-model="registerForm.password" required>
         </label>
         <button type="submit" class="success button" ng-disabled="disabled">Register</button>

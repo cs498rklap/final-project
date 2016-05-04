@@ -64,15 +64,13 @@ function ($scope, $location, AuthService) {
         // call register from service
         AuthService.register($scope.registerForm.username, $scope.registerForm.password, $scope.registerForm.email, $scope.registerForm.name)
         // handle success
-        .then(function () {
+        .then(function (response) {
             $location.path('/login');
             $scope.disabled = false;
             $scope.registerForm = {};
-        })
-        // handle error
-        .catch(function () {
+        }, function (error) {
             $scope.error = true;
-            $scope.errorMessage = "Something went wrong!";
+            $scope.errorMessage = "Username or email already taken";
             $scope.disabled = false;
             $scope.registerForm = {};
         });
@@ -94,17 +92,12 @@ userControllers.controller('HomeController', ['$scope', function($scope) {
         $("#carousel").owlCarousel({
             singleItem: true,
             slideSpeed: 300,
-            navigation: true,
-            navigationText: ["Back", "Next"],
-            paginationNumbers: true,
-            paginationSpeed: 400,
             autoHeight: true,
-            transitionStyle: "fadeUp",
+            transitionStyle: "fade",
             loop:  true,
-            margin:  10,
             autoPlay:  true,
-            autoPlayTimeout:  500,
-            autoPlayHoverPause:  true
+            autoPlayTimeout:  500
+            //autoPlayHoverPause:  true
         }).trigger('play.owl.autoplay',[500]);
     };
 

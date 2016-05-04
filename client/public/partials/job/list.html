@@ -22,7 +22,7 @@
         <label>Choose State:
             <div class="input-group">
                 <select class="input-group-field" ng-options="st.abbreviation as st.name for st in states" ng-model="state"></select>
-                <div class="input-group-button"><button class="button success" ng-click="page=1; refresh()">Search</button></div>
+                <div class="input-group-button"><button class="button" ng-click="page=1; refresh()">Search</button></div>
             </div>
         </label>
     </div>
@@ -30,7 +30,7 @@
         <label>Search Query:
             <div class="input-group">
                 <input class="input-group-field" type="text" ng-model="query" placeholder="Search Term"></input>
-                <div class="input-group-button"><button class="button success" ng-click="page=1; refresh()">Search</button></div>
+                <div class="input-group-button"><button class="button" ng-click="page=1; refresh()">Search</button></div>
             </div>
         </label>
     </div>
@@ -46,7 +46,7 @@
 </div>
 <div ng-repeat="job in jobs" class="row">
     <div class="columns small-12">
-        <h4><a href="#/jobs/{{job._id}}">{{job.title}}</a></h4>
+        <h4><a href="#/jobs/{{job._id}}" class="job-link">{{job.title}}</a></h4>
     </div>
     <div class="columns small-12 medium-9">
         <p>{{job.city}}, {{job.state}}</p>

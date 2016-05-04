@@ -43,6 +43,7 @@ body {
     background:  $dark-green;
     position: fixed;
     width: 100%;
+    z-index: 100;
 }
 
 .top-bar {
@@ -96,7 +97,7 @@ body {
 }
 
 /* Shared */
-.dashboard-link, .post-link {
+.dashboard-link, .post-link, .job-link {
     @include regular-link;
 }
 
@@ -118,11 +119,44 @@ body {
     color: $dark-purple;
 }
 
+.tag {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
+    color: $dark-gray;
+}
+
+.button {
+    background-color: $dark-purple;
+    &:hover {
+        background-color: $dark-purple;
+        color: $gray;
+    }
+}
+
+.button.success {
+    background-color: $dark-green;
+    &:hover {
+        background-color: $dark-green;
+        color: $gray;
+    }
+}
+
+/* Home */
+.item img {
+    width: 100%;
+    @include breakpoint(large up) {
+        height: calc(100vh - 100px);
+    }
+}
+
 /* Dashboard */
 .dashboard-table {
     tbody tr {
         background-color: $white;
-        border: 1px solid $light-gray;
+        @include light-gray-border;
     }
 }
 
@@ -142,6 +176,11 @@ body {
 
 .post-list-heading {
     color: $dark-green;
+}
+
+/* Posts Individual */
+.comment-column {
+    @include light-gray-border;
 }
 
 /* Jobs */
