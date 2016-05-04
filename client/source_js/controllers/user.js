@@ -72,3 +72,35 @@ function ($scope, $location, AuthService) {
     };
 
 }]);
+
+/* Home Page Controller ---------------------------------------------------------------------------------- */
+// Image Sources (Images Cropped and Overlay Text Added):
+//     http://rack.3.mshcdn.com/media/ZgkyMDEyLzEyLzA2LzY0L2pvYnNlYXJjaDY0LjRDMC5qcGcKcAl0aHVtYgk5NTB4NTM0IwplCWpwZw/f1cda8a5/cfa/job-search-640x400.jpg
+//     https://idisciple.blob.core.windows.net/idm/You-Will-Help-Others-Overcome-What-You-Have-Been-Through.png
+//     http://www.framingthedialogue.com/wp-content/uploads/2009/12/magic8ball-its-bushs-fault.jpg
+//     http://www.mrwallpaper.com/wallpapers/blue-sunny-sky.jpg
+userControllers.controller('HomeController', ['$scope', function($scope) {
+    /* Functions used in this controller: */
+    // Initialize the Owl Carousel variables
+    $scope.loadCarousel = function() {
+        $("#carousel").owlCarousel({
+            singleItem: true,
+            slideSpeed: 300,
+            navigation: true,
+            navigationText: ["Back", "Next"],
+            paginationNumbers: true,
+            paginationSpeed: 400,
+            autoHeight: true,
+            transitionStyle: "fadeUp",
+            loop:  true,
+            margin:  10,
+            autoPlay:  true,
+            autoPlayTimeout:  500,
+            autoPlayHoverPause:  true
+        }).trigger('play.owl.autoplay',[500]);
+    };
+
+    /* Code to run automatically on page load: */
+    $scope.loadCarousel();
+
+}]);
