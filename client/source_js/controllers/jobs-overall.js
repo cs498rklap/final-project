@@ -197,7 +197,7 @@ jobsControllers.controller('JobAddController', ['$scope', '$location', 'Jobs', '
                 "link": $scope.link,
                 "deadline": $scope.deadline,
                 "description": $scope.description,
-                "tags": tagsArray
+                "tags": $scope.newTags
             };
 
             Jobs.post(postBody).
