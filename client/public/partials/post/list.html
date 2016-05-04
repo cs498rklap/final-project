@@ -9,7 +9,7 @@
             <li>
                 <div class="row">
                     <div class="columns small-12 medium-10 medium-offset-1 center">
-                        <p>One of the core aspects of this community is the ability to be able to share your experiences with others. If you'd like to write a post, click <a href="#/addpost">here.</a></p>
+                        <p>One of the core aspects of this community is the ability to be able to share your experiences with others. If you'd like to write a post, click <a href="#/addpost" class="post-link">here.</a></p>
                     </div>
                 </div>
             </li>
@@ -61,6 +61,7 @@
                         <h6>Author:  {{post.author}} <small>{{post.timestamp | date: 'MMMM d, yyyy'}}</small></h6>
                         <p>{{post.content}}</p>
                         <p>Tags: <span ng-repeat="tag in post.tags" ng-if="$index < 3" class="info label tag">{{tag}}</span><span ng-if="post.tags.length == 0" class="label default">none</span></p>
+                        <p>Comments: {{post.comments.length}}</p>
                         <a class="post-link" href="#/posts/{{post._id}}">Read more</a>
                     </div>
                 </li>

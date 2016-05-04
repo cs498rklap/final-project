@@ -54,7 +54,7 @@
     </div>
     <div class="columns small-12 medium-3">
         <p>Deadline: <b><span ng-if="job.deadline">{{job.deadline | date: 'MMMM d, yyyy'}}</span><span ng-if="!job.deadline">Rolling</span></b></p>
-        <p>Tags: <span ng-repeat="tag in job.tags" ng-if="$index < 3" class="info label">{{tag}}</span><span ng-if="job.tags.length == 0" class="label default">none</span></p>
+        <p>Tags: <span ng-repeat="tag in job.tags" ng-if="$index < 3" class="info label tag">{{tag}}</span><span ng-if="job.tags.length == 0" class="label default">none</span></p>
     </div>
 </div>
 <div class="row text-center">

@@ -4,7 +4,7 @@
         <div class="columns small-12 medium-4">
             <h3>By: {{post.author}} <small>{{post.timestamp | date: 'MMMM d, yyyy'}}</small></h3>
         </div>
-        <div ng-show="psot.user == user._id" class="columns small-12 medium-4">
+        <div ng-show="post.user == user._id" class="columns small-12 medium-4">
             <h6>Author Tools</h6>
             <a href="#/edit-post/{{post._id}}"><button class="button success">Edit</button></a>
             <button ng-click="deletePost()" class="button alert">Delete</button>

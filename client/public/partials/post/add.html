@@ -5,38 +5,17 @@
     <div class="row">
         <div class="small-12 columns" ng-hide="fatalError">
             <label>
-                <span ng-class="{'error': showTitleError}"> Title: </span><span class="red">*</span>
+                <span ng-class="{'error': showTitleError}"> Title: </span><span class="error">*</span>
                 <input type="text" ng-model="newTitle" placeholder="Enter a title for your new post" />
             </label>
-        </div>
-    </div>
-    <div class="warning" ng-show="showTitleError">
-        <div class="row">
-            <div class="small-12 columns">
-                <span class="alert label"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i><i>  Title is required!</i></span>
-            </div>
-        </div>
-    </div>
-    <div class="warning" ng-show="showAuthorError">
-        <div class="row">
-            <div class="small-12 columns">
-                <span class="alert label"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <i>  Author is required!</i></span>
-            </div>
         </div>
     </div>
     <div class="row" ng-hide="fatalError">
         <div class="small-12 columns">
             <label>
-                <span ng-class="{'error': showContentError}"> Content: </span><span class="red">*</span>
+                <span ng-class="{'error': showContentError}"> Content: </span><span class="error">*</span>
                 <textarea ng-model="newContent" rows="5" cols="50"></textarea>
             </label>
-        </div>
-    </div>
-    <div class="warning" ng-show="showContentError">
-        <div class="row">
-            <div class="small-12 columns">
-                <span class="alert label"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <i>  Content is required!</i></span>
-            </div>
         </div>
     </div>
     <div class="row" ng-hide="fatalError">
@@ -46,7 +25,6 @@
                 <input type="text" ng-model="newTag" placeholder="Type a tag and press Enter" ng-keyup="$event.keyCode == 13 && addTag()" />
             </label>
             <p><span class="info label" ng-repeat="tag in newTags">{{tag}}<a ng-click="removeTag($index)"><i class="fa fa-times"></i></a></span></p>
-            <span ng-show="tagError || tagError.length > 0" class="alert label"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>{{tagError}}</span>
         </div>
     </div>
     <div class="row" ng-hide="fatalError">
@@ -54,19 +32,16 @@
             <button class="button success" ng-click="addPost()">Submit</button>
         </div>
     </div>
-    <div class="message" ng-show="showResultSuccess">
-        <div class="row text-center">
-            <span class="success label"><i class="fa fa-check" aria-hidden="true"></i>  Post ''{{prevPostName}}'' successfully added!</span>
-        </div>
-    </div>
-    <div class="message" ng-show="showResultError">
-        <div class="row text-center">
-            <span class="alert label"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>  {{resultErrorMessage}}</span>
-        </div>
-    </div>
-    <div class="message" ng-show="fatalError">
-        <div class="row text-center">
-            <span class="alert label"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>  {{fatalErrorMessage}}</span>
+    <div class="row" ng-show="showResultError || fatalError || showTitleError || showAuthorError || showContentError || tagError || tagError.length > 0">
+        <div class="columns small-12">
+            <div class="callout alert">
+                <p ng-if="showResultError">{{resultErrorMessage}}</p>
+                <p ng-if="fatalError">{{fatalErrorMessage}}</p>
+                <p ng-if="showTitleError">Title is required.</p>
+                <p ng-if="showAuthorError">Something went wrong fetching your user credentials.</p>
+                <p ng-if="showContentError">Content is required.</p>
+                <p ng-if="tagError || tagError.length > 0">{{tagError}}</p>
+            </div>
         </div>
     </div>
 </div>

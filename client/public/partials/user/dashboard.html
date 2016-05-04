@@ -11,9 +11,9 @@
                 <tbody>
                     <tr ng-repeat="post in mostRecentPosts">
                         <td>
-                            <h5>{{post.title}} <small>{{post.timestamp | date: 'MMMM d, yyyy'}}</small></h5>
+                            <h5><a href="#/posts/{{post._id}}" class="post-link">{{post.title}}</a> <small>{{post.timestamp | date: 'MMMM d, yyyy'}}</small></h5>
                             <p>{{post.content}}</p>
-                            <a class="dashboard-link" href="#/posts/{{post._id}}">Read More</a>
+                            <p>Tags: <span ng-repeat="tag in post.tags" ng-if="$index < 3" class="info label tag">{{tag}}</span><span ng-if="post.tags.length == 0" class="label default">none</span></p>
                         </td>
                     </tr>
                 </tbody>
@@ -42,9 +42,9 @@
                 <tbody>
                     <tr ng-repeat="post in myPosts">
                         <td>
-                            <h5>{{post.title}} <small>{{post.timestamp | date: 'MMMM d, yyyy'}}</small></h5>
+                            <h5><a href="#/posts/{{post._id}}" class="post-link">{{post.title}}</a> <small>{{post.timestamp | date: 'MMMM d, yyyy'}}</small></h5>
                             <p>{{post.content}}</p>
-                            <a class="dashboard-link" href="#/posts/{{post._id}}">Read More</a>
+                            <p>Comments: {{post.comments.length}}</p>
                         </td>
                         <td>
                             <a href="#/edit-post/{{post._id}}"><button class="button success">Edit</button></a>

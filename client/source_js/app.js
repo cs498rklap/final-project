@@ -29,6 +29,10 @@ app.config(['$routeProvider', function($routeProvider) {
         controller: 'HomeController',
         access: {restricted: false}
     }).
+    when('/about', {
+        templateUrl: 'partials/about.html',
+        access: {restricted: false}
+    }).
     when('/dashboard', {
         templateUrl: 'partials/user/dashboard.html',
         controller: 'DashboardController',

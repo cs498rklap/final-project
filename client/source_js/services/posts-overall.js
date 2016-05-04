@@ -4,13 +4,13 @@ var postsServices = angular.module('posts.services', []);
 postsServices.factory('Posts', function($http) {
 	return {
 		get : function(sortField, sortDirection, limit, skip, count) {
-			return $http.get('http://localhost:3000/api/posts?select={"__v": 0, "comments": 0, "user": 0}&sort={"'+sortField+'":"'+sortDirection+'"}&limit='+limit+'&skip='+skip+'&count='+count);
+			return $http.get('http://localhost:3000/api/posts?select={"__v": 0, "user": 0}&sort={"'+sortField+'":"'+sortDirection+'"}&limit='+limit+'&skip='+skip+'&count='+count);
 		},
 		getLike : function(searchField, searchTerm, sortField, sortDirection, limit, skip, count) {
 			if(searchField == "" || searchField == null || searchTerm == "" || searchTerm == null) {
-				return $http.get('http://localhost:3000/api/posts?select={"__v": 0, "comments": 0, "user": 0}&sort={"'+sortField+'":"'+sortDirection+'"}&limit='+limit+'&skip='+skip+'&count='+count);
+				return $http.get('http://localhost:3000/api/posts?select={"__v": 0, "user": 0}&sort={"'+sortField+'":"'+sortDirection+'"}&limit='+limit+'&skip='+skip+'&count='+count);
 			}
-			return $http.get('http://localhost:3000/api/posts?find="'+searchTerm+'"&findField="'+searchField+'"&select={"__v": 0, "comments": 0, "user": 0}&sort={"'+sortField+'":"'+sortDirection+'"}&limit='+limit+'&skip='+skip+'&count='+count);
+			return $http.get('http://localhost:3000/api/posts?find="'+searchTerm+'"&findField="'+searchField+'"&select={"__v": 0, "user": 0}&sort={"'+sortField+'":"'+sortDirection+'"}&limit='+limit+'&skip='+skip+'&count='+count);
 		},
 		getById : function(postId) {
 			return $http.get('http://localhost:3000/api/posts/'+postId);
