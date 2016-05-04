@@ -1,25 +1,152 @@
-@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css');
+/* Text */
+h1, h2, h3, h4, h5, h6 {
+    font-family: $font-h;
+}
 
-.error {
-    color: $red;
+h1 {
+    font-size: $font-h1-size;
+}
+
+h2 {
+    font-size: $font-h2-size;
+}
+
+h3 {
+    font-size: $font-h3-size;
+}
+
+h4 {
+    font-size: $font-h4-size;
+}
+
+h5 {
+    font-size: $font-h5-size;
+}
+
+h6 {
+    font-size: $font-h6-size;
+}
+
+/* Body */
+body {
+    font-family: $font-primary;
+    font-size: $font-primary-size;
+}
+
+#wrapper {
+    margin-top: 50px;
+}
+
+/* Navbar Styles */
+.title-bar, .top-bar {
+    font-weight: bold;
+    background:  $dark-green;
+    position: fixed;
+    width: 100%;
 }
 
 .top-bar {
-    font-weight: bold;
-    background:  $bright-green;
-
+    @include breakpoint(medium up) {
+        @include pressed-top;
+    }
+    @include breakpoint(small down) {
+        top: 25px;
+        left: 0;
+    }
+    ul {
+        background-color: $dark-green;
+    }
 }
 
-.menu-text, .menu-item, .drop-menu {
-    background: $bright-green;
+.title-bar {
+    @include pressed-top;
 }
 
-.vert-menu1, .vert-menu2, .vert-menu3 {
-    background: white;
+.title-bar-title {
+    font-family: $font-primary;
 }
 
+.menu-item {
+    background: $dark-green;
+    a {
+        @include menu-link;
+    }
+}
+
+.dropdown > li {
+    background: $dark-green;
+    a {
+        @include menu-link;
+    }
+}
+
+.is-dropdown-submenu {
+    min-width: 100px;
+}
+
+.is-dropdown-submenu-parent.is-down-arrow a::after {
+    border-color: $white transparent transparent;
+}
+
+.vertical {
+    border: none;
+    li {
+        background: $dark-green;
+    }
+}
+
+/* Shared */
+.dashboard-link, .post-link {
+    @include regular-link;
+}
+
+.page-arrow {
+    @include breakpoint(medium up) {
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+    }
+    cursor: pointer;
+}
+
+.unavailable {
+    color: $dark-gray;
+    cursor: default;
+}
+
+.title {
+    color: $dark-purple;
+}
+
+/* Dashboard */
+.dashboard-table {
+    tbody tr {
+        background-color: $white;
+        border: 1px solid $light-gray;
+    }
+}
+
+.dashboard-title {
+    color: $dark-purple;
+}
+
+/* Posts List */
+.posts-grid-item {
+    padding-bottom: 20px;
+}
+
+.posts-list {
+    list-style-type: none;
+    margin: 0;
+}
+
+.post-list-heading {
+    color: $dark-green;
+}
+
+/* Jobs */
 .job-content {
-    background: $bright-green;
+    background: $dark-green;
     border-style: solid;
     border-width: 1px;
 }
@@ -42,69 +169,11 @@
 #share, #apply {
     background: $dark-purple;
 }
-/* Shared: ----------------------------------------------------------------------------------------- */
-body {
-    font-family: $font-primary;
-    font-size: $font-primary-size;
-}
-
-.h {
-    font-family: $font-h;
-    color: $dark-green;
-}
-h1 {
-    @extend .h;
-    font-size: $font-h1-size;
-}
-h2 {
-    @extend .h;
-    font-size: $font-h2-size;
-}
-h3 {
-    @extend .h;
-    font-size: $font-h3-size;
-}
-h4 {
-    @extend .h;
-    font-size: $font-h4-size;
-}
-h5 {
-    @extend .h;
-    font-size: $font-h5-size;
-}
-h6 {
-    @extend .h;
-    font-size: $font-h6-size;
-}
-
-/* Ai: --------------------------------------------------------------------------------------------- */
-
-/* Emily: ------------------------------------------------------------------------------------------ */
-
-/* Matt: ------------------------------------------------------------------------------------------- */
-
-/* William: ---------------------------------------------------------------------------------------- */
-.page-selected {
-    color: $dark-purple;
-}
-
-.posts-grid-item {
-    padding-bottom: 20px;
-}
-
-.posts-list {
-    list-style-type: none;
-    margin: 0;
-}
-
-.radio-button {
-    padding-right: 10px;
-}
 
 .red {
     color: $red;
 }
 
-a {
-    color: gray;
+.error {
+    color: $red;
 }

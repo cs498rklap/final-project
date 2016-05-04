@@ -1,91 +1,68 @@
 
 <div class="row text-center">
-    <h1>JOB POSTINGS</h1>
+    <h1 class="title">Job Board</h1>
 </div>
-
-{{page}}
-
+<div class="row">
+    <div class="columns small-12 medium-10 medium-offset-1 center">
+        <p>This is a community-sourced list of all employment opportunities available to those with felony backgrounds. Questions or concerns? <a href="mailto:test@test.com">Contact us</a>.</p>
+    </div>
+</div>
 <div class="row clearfix">
-    <span class="float-left">
-        <ul class="pagination">
-            <li ng-class="page<=1 ? 'arrow unavailable' : 'arrow'" ng-click="firstPage();">&laquo</li>
-            <li ng-class="page<=1 ? 'arrow unavailable' : 'arrow'" ng-click="prevPage();"><</li>
-
-            <li ng-repeat="num in getPages()" ng-class="page==num ? 'current' : ''" ng-click="setPage(num);">{{num}}</li>
-
-            <li ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="nextPage();">></li>
-            <li ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="lastPage();">&raquo</li>
-        </ul>
-
-        <span>Search Field:</span>
-        <span>
+    <div class="columns medium-6">
+        <label>Search Field:
             <select ng-model="field">
                 <option value="none">None</option>
                 <option value="state">State</option>
                 <option value="title">Job Title</option>
                 <option value="description">Description</option>
             </select>
-        </span>
-        <span ng-show="field=='state'">
-            <span>State:</span>
-            <select ng-options="st.abbreviation as st.name for st in states"
-                    ng-model="state">
-            </select>
-        </span>
-        <span ng-show="field=='title'||field=='description'">
-            <span>Search Query:</span>
-            <span>
-                <input type="text" ng-model="query" placeholder="Enter search query...">
-            </span>
-        </span>
-        <span class="button success" ng-click="page=1;refresh()">Search</span>
-    </span>
+        </label>
+    </div>
+    <div ng-show="field=='state'" class="columns medium-6">
+        <label>Choose State:
+            <div class="input-group">
+                <select class="input-group-field" ng-options="st.abbreviation as st.name for st in states" ng-model="state"></select>
+                <div class="input-group-button"><button class="button success" ng-click="page=1; refresh()">Search</button></div>
+            </div>
+        </label>
+    </div>
+    <div class="columns medium-6" ng-show="field=='title' || field=='description'">
+        <label>Search Query:
+            <div class="input-group">
+                <input class="input-group-field" type="text" ng-model="query" placeholder="Search Term"></input>
+                <div class="input-group-button"><button class="button success" ng-click="page=1; refresh()">Search</button></div>
+            </div>
+        </label>
+    </div>
 </div>
-
+<div class="row text-center">
+    <ul class="pagination">
+        <li class="page-arrow" ng-class="page<=1 ? 'unavailable' : 'arrow'" ng-click="firstPage()"><i class="fa fa-angle-double-left"></i></span>
+        <li class="page-arrow" ng-class="page<=1 ? 'unavailable' : 'arrow'" ng-click="prevPage()"><i class="fa fa-angle-left"></i></span>
+        <li class="page-arrow" ng-repeat="num in getPages()" ng-class="page==num ? 'current' : ''" ng-click="setPage(num)"> {{num}} </span>
+        <li class="page-arrow" ng-class="page>=maxPage() ? 'unavailable' : 'arrow'" ng-click="nextPage()"> <i class="fa fa-angle-right"></i></span>
+        <li class="page-arrow" ng-class="page>=maxPage() ? 'unavailable' : 'arrow'" ng-click="lastPage()"> <i class="fa fa-angle-double-right"></i></span>
+    </ul>
+</div>
 <div ng-repeat="job in jobs" class="row">
-    <a ng-href="#/jobs/{{job._id}}" class="small-12 columns clearfix">
-        <span class="float-left">
-            {{job.title}} - {{job.city}}, {{job.state}}
-        </span>
-        <span class="float-right">
-            {{job.author}} - {{job.dateCreated}}
-        </span>
-    </a>
+    <div class="columns small-12">
+        <h4><a href="#/jobs/{{job._id}}">{{job.title}}</a></h4>
+    </div>
+    <div class="columns small-12 medium-9">
+        <p>{{job.city}}, {{job.state}}</p>
+        <p>Posted by <b>{{job.author}}</b> on {{job.dateCreated | date: 'MMMM d, yyyy'}}</p>
+    </div>
+    <div class="columns small-12 medium-3">
+        <p>Deadline: <b><span ng-if="job.deadline">{{job.deadline | date: 'MMMM d, yyyy'}}</span><span ng-if="!job.deadline">Rolling</span></b></p>
+        <p>Tags: <span ng-repeat="tag in job.tags" ng-if="$index < 3" class="info label">{{tag}}</span><span ng-if="job.tags.length == 0" class="label default">none</span></p>
+    </div>
 </div>
-
-<div class="row clearfix">
-    <span class="float-left">
-        <ul class="pagination">
-            <li ng-class="page<=1 ? 'arrow unavailable' : 'arrow'" ng-click="firstPage();">&laquo</li>
-            <li ng-class="page<=1 ? 'arrow unavailable' : 'arrow'" ng-click="prevPage();"><</li>
-
-            <li ng-repeat="num in getPages()" ng-class="page==num ? 'current' : ''" ng-click="setPage(num);">{{num}}</li>
-
-            <li ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="nextPage();">></li>
-            <li ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="lastPage();">&raquo</li>
-        </ul>
-        <span>Search Field:</span>
-        <span>
-            <select ng-model="field">
-                <option value="none">None</option>
-                <option value="state">State</option>
-                <option value="title">Job Title</option>
-                <option value="description">Description</option>
-            </select>
-        </span>
-        <span ng-show="field=='state'">
-            <span>State:</span>
-            <select ng-options="st.name for st in states"
-                    ng-model="state">
-            </select>
-        </span>
-        <span ng-show="field=='title'||field=='description'">
-            <span>Search Query:</span>
-            <span>
-                <input type="text" ng-model="query" placeholder="Enter search query...">
-            </span>
-        </span>
-        <span class="button success" ng-click="refresh()">Search</span>
-
-    </span>
+<div class="row text-center">
+    <ul class="pagination">
+        <li class="page-arrow" ng-class="page<=1 ? 'arrow unavailable' : 'arrow'" ng-click="firstPage()"><i class="fa fa-angle-double-left"></i></span>
+        <li class="page-arrow" ng-class="page<=1 ? 'arrow unavailable' : 'arrow'" ng-click="prevPage()"><i class="fa fa-angle-left"></i></span>
+        <li class="page-arrow" ng-repeat="num in getPages()" ng-class="page==num ? 'current' : ''" ng-click="setPage(num)"> {{num}} </span>
+        <li class="page-arrow" ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="nextPage()"> <i class="fa fa-angle-right"></i></span>
+        <li class="page-arrow" ng-class="page>=maxPage() ? 'arrow unavailable' : 'arrow'" ng-click="lastPage()"> <i class="fa fa-angle-double-right"></i></span>
+    </ul>
 </div>

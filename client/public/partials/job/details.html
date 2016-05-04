@@ -1,13 +1,11 @@
-<div class="list" ng-controller='JobsIndividualController'>
-    <div class="row full-width job-content">
-        <h1>{{job.title}} - {{job.city}} {{job.state}}</h1>
-        <p>{{job.description}}</p>
-        <div class="row job-info">
-            <div class="large-10 columns">{{job.author}} - {{timestamp}}</div>
-            <div class="large-2 columns">
-                <a id="apply" class="button" href={{job.link}}>Apply</a>
-                <a id="share" class="button" href="mailto:?Subject=Check%20out%20this%20job!&Body={{job.link}}">Share</a>
-            </div>
+<div class="row">
+    <h1 class="title">{{job.title}} - {{job.city}} {{job.state}}</h1>
+    <p>{{job.description}}</p>
+    <div class="row job-info">
+        <div class="large-10 columns">{{job.author}} - {{timestamp}}</div>
+        <div class="large-2 columns">
+            <a id="apply" class="button" href={{job.link}}>Apply</a>
+            <a id="share" class="button" href="mailto:?Subject=Check%20out%20this%20job!&Body={{job.link}}">Share</a>
         </div>
     </div>
 </div>

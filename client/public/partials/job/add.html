@@ -1,6 +1,6 @@
-<div class="row text-left">
+<div class="row">
     <div class="small-12 columns">
-        <h1>New Job Listing</h1>
+        <h2 class="title text-center">Create New Job Listing</h2>
     </div>
     <div class="small-12 columns">
         <label><span>Job Title</span><span>*</span></label>
@@ -34,8 +34,12 @@
         <input type="text" ng-model="description" placeholder="Write the job description">
     </div>
     <div class="small-12 columns">
-        <label><span>Tags</span></label>
-        <input type="text" ng-model="tags" placeholder="Enter some tags, with a comma between each">
+        <label>
+            Tags:
+            <input type="text" ng-model="newTag" placeholder="Type a tag and press Enter" ng-keyup="$event.keyCode == 13 && addTag()" />
+        </label>
+        <p><span class="info label" ng-repeat="tag in newTags">{{tag}}<a ng-click="removeTag($index)"><i class="fa fa-times"></i></a></span></p>
+        <span ng-show="tagError || tagError.length > 0" class="alert label"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>{{tagError}}</span>
     </div>
     <div class="small-8 medium-10 columns">
         <div class="label success text-center" ng-show="postSuccess">
@@ -45,16 +49,7 @@
             {{postErrorMessage}}
         </div>
     </div>
-    <div class="small-4 medium-2 columns clearfix">
-        <button class="float-right button success" ng-click="postJob()">Publish</button>
+    <div class="small-12 columns">
+        <button class="button success" ng-click="postJob()">Publish</button>
     </div>
 </div>
-    <!--<select ng-options="st.name for st in states"
-            ng-model="state"
-            ng-change="reloadCities()"></select>
-
-        <select ng-model="city">
-            <option ng-repeat="ct in cities | orderBy:'ct.name' " value="{{ct.name}}">
-                {{ct.name}}, {{ct.full_county_name}}
-            </option>
-        </select>-->

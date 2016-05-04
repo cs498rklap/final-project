@@ -4,7 +4,7 @@ dashboardControllers.controller('DashboardController', ['$scope', 'Jobs', 'Posts
     //$scope.user = 'testuser'; // test for now
     $scope.postsOrderBy = 'timestamp';
     $scope.jobsOrderBy = 'dateCreated';
-    $scope.sortDirection = 1;
+    $scope.sortDirection = -1;
     $scope.limit = 5;
 
     $scope.maxContentLength = 75;
@@ -40,6 +40,4 @@ dashboardControllers.controller('DashboardController', ['$scope', 'Jobs', 'Posts
             $scope.error = error.message;
         });
     };
-
-    $scope.initialize();
 }]);

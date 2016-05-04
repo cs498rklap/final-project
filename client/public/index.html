@@ -20,33 +20,46 @@
     <script src="./js/services.js"></script>
 </head>
 
-<body ng-app="lap">
-
-    <div class="top-bar">
+<body ng-app="lap" ng-controller="MainController">
+    <div class="title-bar" data-responsive-toggle="main-nav" data-hide-for="medium">
+        <button class="menu-icon" type="button" data-toggle></button>
+        <div class="title-bar-title">L.A.P.v2</div>
+    </div>
+    <div class="top-bar" id="main-nav">
         <div class="top-bar-left">
             <ul class="menu">
-                <li class="menu-text">Life After Prison 2.0</li>
-                <li class = "menu-item"><a href="#/posts">Advice Column</a></li>
-                <li class = "menu-item"><a href="#/jobs">Job Board</a></li>
+                <li class="menu-item"><a href="{{isLoggedIn ? '#/dashboard' : '#/'}}">Life After Prison 2.0</a></li>
+                <li ng-show="isLoggedIn" class="menu-item"><a href="#/posts">Advice Column</a></li>
+                <li ng-show="isLoggedIn" class="menu-item"><a href="#/jobs">Job Board</a></li>
             </ul>
         </div>
         <div class="top-bar-right">
             <ul class="dropdown menu" data-dropdown-menu>
-                <li class = "drop-menu">
+                <li ng-show="isLoggedIn">
                     <a href="#">Create New</a>
                     <ul class="menu vertical">
-                        <li class = "vert-menu1"><a href="#/addpost">Post</a></li>
-                        <li class = "vert-menu3"><a href="#/addjob">Job Listing</a></li>
+                        <li><a href="#/addpost">Post</a></li>
+                        <li><a href="#/addjob">Job Listing</a></li>
                     </ul>
                 </li>
-            </div>
+                <li ng-show="isLoggedIn">
+                    <a href="#">Settings</a>
+                    <ul class="menu vertical">
+                        <li><a href="#/dashboard">Dashboard</a></li>
+                        <li ng-controller="LogoutController"><a ng-click="logout()">Log out</a></li>
+                    </ul>
+                </li>
+                <li ng-show="!isLoggedIn" class="menu-item"><a href="#/login">Log in</a></li>
+                <li ng-show="!isLoggedIn" class="menu-item"><a href="#/register">Register</a></li>
+            </ul>
         </div>
     </div>
 
 
     <!-- Code from the partial will be inserted here -->
-
-    <div ng-view></div>
+    <div id="wrapper">
+        <div ng-view></div>
+    </div>
 
     <!-- Scripts -->
     <script src="./lib/angularjs-datepicker/src/js/angular-datepicker.js"></script>

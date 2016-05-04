@@ -1,8 +1,14 @@
 var userControllers = angular.module('user.controllers', []);
 
+userControllers.controller('MainController', ['$scope', '$rootScope', 'AuthService', function($scope, $rootScope, AuthService) {
+    AuthService.getUserStatus().then(function(){
+        $rootScope.isLoggedIn = AuthService.isLoggedIn();
+    });
+}]);
+
 userControllers.controller('LoginController',
-['$scope', '$location', 'AuthService',
-function ($scope, $location, AuthService) {
+['$scope', '$location', '$rootScope', 'AuthService',
+function ($scope, $location, $rootScope, AuthService) {
     $scope.login = function () {
 
         // initial values
@@ -15,6 +21,7 @@ function ($scope, $location, AuthService) {
         .then(function () {
             $scope.disabled = false;
             $scope.loginForm = {};
+            $rootScope.isLoggedIn = true;
             $location.path('/dashboard');
         })
         // handle error
@@ -28,14 +35,15 @@ function ($scope, $location, AuthService) {
 }]);
 
 userControllers.controller('LogoutController',
-['$scope', '$location', 'AuthService',
-function ($scope, $location, AuthService) {
+['$scope', '$rootScope', '$location', 'AuthService',
+function ($scope, $rootScope, $location, AuthService) {
 
     $scope.logout = function () {
 
         // call logout from service
         AuthService.logout()
         .then(function () {
+            $rootScope.isLoggedIn = false;
             $location.path('/login');
         });
 

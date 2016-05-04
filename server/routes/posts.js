@@ -13,7 +13,7 @@ postsRoute.get(function(req, res) {
     var findString = req.query["find"];
     var findField = req.query["findField"];
     var query = null;
-    if(findField == '"author"' && findString != undefined && findString != "") {
+    /*if(findField == '"author"' && findString != undefined && findString != "") {
         query = Posts.find({author: new RegExp(findString.substring(1, findString.length-2), "i")});
     }
     else if(findField == '"title"' && findString != undefined && findString != "") {
@@ -21,6 +21,10 @@ postsRoute.get(function(req, res) {
     }
     else if(findField == '"tags"' && findString != undefined && findString != "") {
         query = Posts.find({tags: new RegExp(findString.substring(1, findString.length-2), "i")});
+    }*/
+    if(findString != undefined && findString != "") {
+        var regex = new RegExp(findString.substring(1, findString.length-2), "i");
+        query = Posts.find({$or: [{author: regex}, {title: regex}, {tags: regex}]});
     }
     else {
         query = Posts.find();

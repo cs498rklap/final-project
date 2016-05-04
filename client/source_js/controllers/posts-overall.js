@@ -69,7 +69,7 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 							post.content = post.content.substring(0, $scope.maxContentLength);
 							post.content += ". . .";
 						}
-						post.timestamp = new Date(post.timestamp).toLocaleString();
+						//post.timestamp = new Date(post.timestamp).toLocaleString();
 					});
 					$scope.updatePagesList($scope.currentPage-$scope.halfMaxPageNumbers, $scope.currentPage+$scope.halfMaxPageNumbers);
 				}
@@ -129,7 +129,8 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 	// Go to the next page
 	$scope.nextPage = function() {
 		if(($scope.currentPage + 1) > $scope.numPages) {
-			$scope.currentPage = 1;
+			//$scope.currentPage = 1;
+			return;
 		}
 		else {
 			$scope.currentPage = $scope.currentPage + 1;
@@ -140,7 +141,8 @@ postsControllers.controller('PostsController', ['$scope', 'Posts', function($sco
 	// Go to the previous page
 	$scope.previousPage = function() {
 		if(($scope.currentPage - 1) <= 0) {
-			$scope.currentPage = $scope.numPages;
+			//$scope.currentPage = $scope.numPages;
+			return;
 		}
 		else {
 			$scope.currentPage = $scope.currentPage - 1;
@@ -189,7 +191,8 @@ postsControllers.controller('AddPostController', ['$scope', '$location', 'Posts'
 	$scope.newTitle = "";
 	$scope.newAuthor = "";
 	$scope.newContent = "";
-	$scope.newTags = "";
+	$scope.newTag = "";
+	$scope.newTags = [];
 	$scope.user = [];
 	// Errors:
 	$scope.showTitleError = false;
@@ -202,6 +205,19 @@ postsControllers.controller('AddPostController', ['$scope', '$location', 'Posts'
 	$scope.prevPostName = "";
 	$scope.resultErrorMessage = "";
 	$scope.fatalErrorMessage = "";
+
+	$scope.addTag = function() {
+        if ($scope.newTags.indexOf($scope.newTag) >= 0) {
+            $scope.tagError = 'You\'ve already added this tag.';
+        } else if ($scope.newTag.length > 0) {
+            $scope.newTags.push($scope.newTag);
+        }
+        $scope.newTag = '';
+    };
+
+	$scope.removeTag = function(index) {
+        $scope.newTags.splice(index, 1);
+    };
 
 	/* Functions Used in This Controller */
 	// Add a post to the database using the given information
@@ -233,17 +249,17 @@ postsControllers.controller('AddPostController', ['$scope', '$location', 'Posts'
 		}
 
 		// Format tags to send to the API
-		var newTagsArray = [];
+		/*var newTagsArray = [];
 		if($scope.newTags != undefined && $scope.newTags != "") {
 			newTagsArray = $scope.newTags.split(',');
-		}
+		}*/
 
 		// Send the new post data to the API
-		Posts.post($scope.newTitle, $scope.newAuthor, $scope.user, $scope.newContent, newTagsArray).success(function(data) {
+		Posts.post($scope.newTitle, $scope.newAuthor, $scope.user, $scope.newContent, $scope.newTags).success(function(data) {
 			$scope.showResultSuccess = true;
 			$scope.prevPostName = $scope.newTitle;
 			// Go back to the list of posts after successfully creating this new post
-			$location.path("/posts");
+			$location.path("/posts/" + data.data._id);
 		}).error(function(data) {
 			if(data == undefined || data == null) {
 				$scope.resultErrorMessage = "Error connecting to the API.  Unable to add the new post.";

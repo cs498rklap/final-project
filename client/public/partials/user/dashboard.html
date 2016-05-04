@@ -1,51 +1,50 @@
-<div ng-controller="LogoutController">
-    <a ng-click="logout()" class="button success">Logout</a>
-</div>
-<div>
+<div ng-init="initialize()">
     <div class="row">
         <div class="columns small-12">
-            <h1>Hello {{user.name}}!</h1>
+            <h1 class="dashboard-title">Hello {{user.name}}!</h1>
         </div>
     </div>
     <div class="row">
         <div class="columns small-12 medium-8 large-9">
-            <h3>Recent Posts</h3>
-            <table>
+            <h3 class="dashboard-title">Recent Posts</h3>
+            <table class="dashboard-table">
                 <tbody>
                     <tr ng-repeat="post in mostRecentPosts">
                         <td>
-                            <h4>{{post.title}}</h4>
+                            <h5>{{post.title}} <small>{{post.timestamp | date: 'MMMM d, yyyy'}}</small></h5>
                             <p>{{post.content}}</p>
-                            <a href="#/posts/{{post._id}}">Read More</a>
+                            <a class="dashboard-link" href="#/posts/{{post._id}}">Read More</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <h6 class="text-center"><a class="dashboard-link" href="#/posts">View More Posts</a></h6>
         </div>
         <div class="columns small-12 medium-4 large-3">
-            <h4>Recent Job Listings</h4>
-            <table>
+            <h3 class="dashboard-title">Recent Jobs</h3>
+            <table class="dashboard-table">
                 <tbody>
                     <tr ng-repeat="job in mostRecentJobs">
                         <td>
-                            <h6><a href="#/jobs/{{job._id}}">{{job.title}}</a></h6>
-                            <p>{{job.company}} | {{job.city}}, {{job.state}}</p>
+                            <h6><a class="dashboard-link" href="#/jobs/{{job._id}}">{{job.title}}</a></h6>
+                            <p><b>{{job.company}}</b> <small>{{job.city}}, {{job.state}}</small></p>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <p class="text-center"><a class="dashboard-link" href="#/jobs">View More Jobs</a></p>
         </div>
     </div>
     <div class="row">
         <div class="columns small-12 medium-8 large-9">
-            <h3>Your Posts</h3>
-            <table>
+            <h3 class="dashboard-title">Your Posts</h3>
+            <table class="dashboard-table">
                 <tbody>
                     <tr ng-repeat="post in myPosts">
                         <td>
-                            <h4>{{post.title}}</h4>
+                            <h5>{{post.title}} <small>{{post.timestamp | date: 'MMMM d, yyyy'}}</small></h5>
                             <p>{{post.content}}</p>
-                            <a href="#/posts/{{post._id}}">Read More</a>
+                            <a class="dashboard-link" href="#/posts/{{post._id}}">Read More</a>
                         </td>
                         <td>
                             <a href="#/edit-post/{{post._id}}"><button class="button success">Edit</button></a>
