@@ -49,6 +49,7 @@
         <h4><a href="#/jobs/{{job._id}}" class="job-link">{{job.title}}</a></h4>
     </div>
     <div class="columns small-12 medium-9">
+        <p>{{job.company}}</p>
         <p>{{job.city}}, {{job.state}}</p>
         <p>Posted by <b>{{job.author}}</b> on {{job.dateCreated | date: 'MMMM d, yyyy'}}</p>
     </div>

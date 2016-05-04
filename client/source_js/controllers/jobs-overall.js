@@ -1,7 +1,7 @@
 var jobsControllers = angular.module('jobs.controllers', []);
 
 jobsControllers.controller('JobListController', ['$scope', 'Jobs', function($scope, Jobs) {
-    var jobsPerPage = 8;
+    var jobsPerPage = 6;
     $scope.refresh = function () {
         if ($scope.field=='state'){
             $scope.which={state:$scope.state};
