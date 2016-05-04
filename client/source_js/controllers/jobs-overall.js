@@ -1,8 +1,17 @@
 var jobsControllers = angular.module('jobs.controllers', []);
 
 jobsControllers.controller('JobListController', ['$scope', 'Jobs', function($scope, Jobs) {
-    var jobsPerPage = 1;
+    var jobsPerPage = 4;
     $scope.refresh = function () {
+        if ($scope.field=='state'){
+            $scope.which={state:$scope.state};
+        } else if ($scope.field=='title'){
+            $scope.which={title: { "$regex": $scope.query, "$options": "i" }};
+        } else if ($scope.field=='description') {
+            $scope.which={description: { "$regex": $scope.query, "$options": "i" }};
+        } else {
+            $scope.which="";
+        }
         var queryString= "where="+JSON.stringify($scope.which)+"&sort={"+$scope.orderBy+":"+$scope.order+"}&limit="+jobsPerPage+"&skip="+(($scope.page-1)*jobsPerPage);
         Jobs.get(queryString).success(function (data) {
             $scope.jobs = data['data'];
@@ -11,7 +20,8 @@ jobsControllers.controller('JobListController', ['$scope', 'Jobs', function($sco
             $scope.count = data['data'];
         });
     };
-
+    $scope.field='none';
+    $scope.states=Jobs.states();
     $scope.which = "";
     $scope.orderBy = "dateCreated";
     $scope.order = -1;
