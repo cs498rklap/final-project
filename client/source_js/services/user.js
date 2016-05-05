@@ -1,5 +1,4 @@
 var userServices = angular.module('user.services', []);
-var baseUrl = "http://localhost:3000/api";
 
 userServices.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $http) {
 
@@ -16,7 +15,7 @@ userServices.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $t
             }
         },
         getUserStatus: function() {
-            return $http.get(baseUrl + '/user/status')
+            return $http.get('/api/user/status')
             // handle success
             .success(function (data) {
                 if(data.status){
@@ -39,7 +38,7 @@ userServices.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $t
                 password: password
             };
             // send a post request to the server
-            $http.post(baseUrl + '/user/login',
+            $http.post('/api/user/login',
             $.param(params), {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -72,7 +71,7 @@ userServices.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $t
             var deferred = $q.defer();
 
             // send a get request to the server
-            $http.get(baseUrl + '/user/logout')
+            $http.get('/api/user/logout')
             // handle success
             .success(function (data) {
                 user = false;
@@ -98,7 +97,7 @@ userServices.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $t
                 name: name
             };
             // send a post request to the server
-            $http.post(baseUrl + '/user/register', $.param(params), {
+            $http.post('/api/user/register', $.param(params), {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
@@ -120,7 +119,7 @@ userServices.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $t
             return deferred.promise;
         },
         getUserInformation: function() {
-            return $http.get(baseUrl + '/user/info');
+            return $http.get('/api/user/info');
         }
     });
 }]);
